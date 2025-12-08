@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# Documentation (not needed in container)
+*.md
+!README.md
+
+# Test files
+test_api.html
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Development files
+*.csv
+*.docx
+*.pdf
+openrouter.txt
+
+# Old prototype folder
+prototype/
+
+# Prompts folder (legacy)
+prompts/
+
+# Claude Code
+.claude/
+
+# History (will be created at runtime)
+data/history.json

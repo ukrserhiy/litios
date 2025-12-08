@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local development
+*.log
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Data files (user-specific)
+data/history.json
+
+# Temporary and test files
+*.csv
+openrouter.txt
+test_api.html
+openrouter_activity*.csv
+
+# Old prototype folder (now moved to root)
+prototype/
+
+# Research documents (not needed for deployment)
+*.docx
+*.pdf
+*.txt
+!requirements.txt
+
+# Prompts folder (legacy)
+prompts/
+
+# Claude Code config
+.claude/
+
+# Markdown files except README and DEPLOY
+compass_artifact*.md
+TASK_*.md
+personality_scales_report.md
+project.txt
+prompt.txt
+
+# Ukrainian research files
+*особистості*.md
+*маркери*.md
+Шкали*.md

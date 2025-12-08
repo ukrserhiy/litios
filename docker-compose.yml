@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  liti:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    volumes:
+      # Persist data between restarts
+      - ./data:/app/data
+    restart: unless-stopped

@@ -1,0 +1,3572 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITI - Психолінгвістичний аналіз особистості від FRACTAL</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #080810;
+            --bg-secondary: #0d0d18;
+            --bg-tertiary: #141420;
+            --bg-card: #0f0f1a;
+            --bg-elevated: #1a1a2e;
+            --accent-primary: #9d4edd;
+            --accent-secondary: #c77dff;
+            --accent-tertiary: #e0aaff;
+            --accent-glow: rgba(157, 78, 221, 0.4);
+            --accent-deep: #7b2cbf;
+            --text-primary: #f0e6ff;
+            --text-secondary: #a89ec9;
+            --text-muted: #6b6190;
+            --border-color: #2a2540;
+            --border-glow: rgba(157, 78, 221, 0.3);
+            --success: #4ade80;
+            --success-glow: rgba(74, 222, 128, 0.3);
+            --warning: #fbbf24;
+            --warning-glow: rgba(251, 191, 36, 0.3);
+            --danger: #f87171;
+            --danger-glow: rgba(248, 113, 113, 0.3);
+            --gradient-main: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 50%, #c77dff 100%);
+            --gradient-subtle: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(199, 125, 255, 0.05));
+            --gradient-card: linear-gradient(145deg, rgba(20, 20, 32, 0.8), rgba(15, 15, 26, 0.95));
+            --gradient-radial: radial-gradient(ellipse at top, rgba(157, 78, 221, 0.15) 0%, transparent 60%);
+            --noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-radial);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--noise);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-right: 1px solid var(--border-color);
+            padding: 28px 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-primary) 0%, transparent 50%, var(--accent-primary) 100%);
+            opacity: 0.3;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 44px;
+            padding: 0 8px;
+        }
+
+        .logo-image {
+            width: 104px;
+            height: 104px;
+            border-radius: 18px;
+            object-fit: cover;
+            box-shadow: 0 0 30px var(--accent-glow), 0 4px 20px rgba(0,0,0,0.4);
+            border: 1px solid var(--border-glow);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .nav-section {
+            margin-bottom: 36px;
+        }
+
+        .nav-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            padding: 0 14px;
+            margin-bottom: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--gradient-main);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active::before {
+            display: none;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 18px;
+            background: var(--gradient-subtle);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .api-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 12px var(--danger-glow);
+            animation: pulse 2s infinite;
+        }
+
+        .api-status-dot.connected {
+            background: var(--success);
+            box-shadow: 0 0 12px var(--success-glow);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Fractal Footer */
+        .fractal-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .fractal-link {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .fractal-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+        }
+
+        .fractal-link svg {
+            width: 100px;
+            height: 40px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .fractal-link:hover svg {
+            opacity: 1;
+        }
+
+        .fractal-link span {
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-tertiary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(157, 78, 221, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow), 0 0 30px rgba(157, 78, 221, 0.2);
+            background: var(--bg-elevated);
+        }
+
+        .form-textarea {
+            min-height: 140px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a89ec9' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+            padding-right: 48px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .form-hint a {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .form-hint a:hover {
+            color: var(--accent-tertiary);
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px var(--accent-glow), 0 0 60px rgba(157, 78, 221, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-icon {
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Checkbox */
+        .checkbox-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-wrapper .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper:hover .checkmark {
+            border-color: var(--accent-primary);
+        }
+
+        .checkbox-wrapper input:checked ~ .checkmark {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .checkbox-wrapper .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-wrapper input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Requirements Table */
+        .requirements-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .requirements-table th,
+        .requirements-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .requirements-table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .requirements-table td {
+            font-size: 14px;
+        }
+
+        .requirements-table tr:hover {
+            background: var(--bg-elevated);
+        }
+
+        .match-icon {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .match-yes { color: var(--success); }
+        .match-no { color: var(--danger); }
+        .match-unclear { color: var(--warning); }
+
+        /* Scale List */
+        .scale-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .scale-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .scale-item:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .scale-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .scale-toggle.active {
+            background: var(--accent-primary);
+        }
+
+        .scale-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+
+        .scale-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .scale-info {
+            flex: 1;
+        }
+
+        .scale-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .scale-category {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .scale-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent-primary);
+        }
+
+        .upload-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Analysis Grid */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .analysis-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .analysis-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .analysis-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .analysis-date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .analysis-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .analysis-status.completed {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .analysis-status.processing {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .analysis-preview {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preview-badge {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .preview-badge.high {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .preview-badge.medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .preview-badge.low {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        /* Results Page */
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--border-color);
+        }
+
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .summary-value.positive {
+            color: var(--success);
+        }
+
+        .summary-value.neutral {
+            color: var(--warning);
+        }
+
+        .summary-value.negative {
+            color: var(--danger);
+        }
+
+        /* Score Grid */
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .score-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .score-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .score-bar {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .score-fill.high {
+            background: var(--success);
+        }
+
+        .score-fill.medium {
+            background: var(--warning);
+        }
+
+        .score-fill.low {
+            background: var(--danger);
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-bottom: 32px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-badge {
+            padding: 4px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Processing Animation */
+        .processing-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 15, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .processing-overlay.active {
+            display: flex;
+        }
+
+        .processing-content {
+            text-align: center;
+        }
+
+        .processing-spinner {
+            width: 64px;
+            height: 64px;
+            border: 3px solid var(--bg-tertiary);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .processing-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .processing-subtitle {
+            color: var(--text-muted);
+        }
+
+        .processing-progress {
+            margin-top: 24px;
+            width: 300px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 15, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.modal-lg {
+            max-width: 900px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Expand button */
+        .expand-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 6px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .expand-btn:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        .textarea-wrapper .form-textarea {
+            padding-right: 40px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-tertiary);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 64px 32px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: var(--bg-tertiary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-icon svg {
+            width: 36px;
+            height: 36px;
+            color: var(--text-muted);
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-warning {
+            background: rgba(157, 78, 221, 0.15);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            color: var(--text-secondary);
+        }
+
+        .alert-warning a {
+            color: var(--accent-tertiary);
+            text-decoration: underline;
+        }
+
+        .alert-warning a:hover {
+            color: var(--text-primary);
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+
+        .alert svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+
+        .toast.active {
+            display: flex;
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .results-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+                padding-bottom: 20px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .results-summary {
+                grid-template-columns: 1fr;
+            }
+            .fractal-footer {
+                display: block !important;
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+            .sidebar-footer {
+                margin-top: 16px;
+            }
+        }
+
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: none;
+                overflow-y: visible;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .fractal-footer {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="LITI.jpg" alt="LITI" class="logo-image">
+            <div class="logo-text">LITI</div>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Меню</div>
+                <div class="nav-item active" data-page="analysis">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                    <span>Аналіз</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    <span>Історія</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                    <span>Налаштування</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Інформація</div>
+                <div class="nav-item" onclick="window.open('https://github.com/ukrserhiy/litios', '_blank')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                    </svg>
+                    <span>GitHub</span>
+                </div>
+                <div class="nav-item" onclick="window.open('http://liti.fractal.partners/', '_blank')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/>
+                    </svg>
+                    <span>Документація</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="api-status">
+                <div class="api-status-dot" id="apiStatusDot"></div>
+                <span id="apiStatusText">API не налаштовано</span>
+            </div>
+
+            <div class="fractal-footer">
+                <a href="https://fractal.partners/" target="_blank" class="fractal-link">
+                    <svg viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M63.1658 79.2832V114.219H70.9093V101.839H104.077V95.2192H70.9093V85.9105H104.077V79.2832H63.1658Z" fill="currentColor"/>
+                        <path d="M359.756 107.603V79.2871H352.02V114.223H395.086V107.603H359.759H359.756Z" fill="currentColor"/>
+                        <path d="M318.056 79.2832L296.234 114.219H304.774L309.028 107.408H335.627L339.882 114.219H348.421L326.6 79.2832H318.06H318.056ZM331.486 100.785H313.158L322.322 86.1174L331.486 100.785Z" fill="currentColor"/>
+                        <path d="M151.545 97.6703C153.399 95.0592 153.52 92.2373 153.52 90.7424C153.52 89.1461 153.395 86.0783 151.545 83.4672C149.809 81.02 145.984 79.291 140.254 79.291H110.447V114.227H118.183V101.847H134.61L145.301 114.227H154.484L143.603 101.624C147.502 101.089 150.168 99.6101 151.542 97.6742L151.545 97.6703ZM140.258 95.2192H118.19V85.9105H140.258C140.258 85.9105 144.91 85.7895 145.453 89.513C145.515 89.9501 145.515 91.1718 145.453 91.6089C144.91 95.3402 140.258 95.2114 140.258 95.2114V95.2192Z" fill="currentColor"/>
+                        <path d="M305.336 85.9105V79.2832H262.27V85.9105H279.927V114.223H287.671V85.9105H305.336Z" fill="currentColor"/>
+                        <path d="M179.877 79.2832L158.056 114.219H166.595L170.85 107.408H197.449L201.703 114.219H210.243L188.421 79.2832H179.881H179.877ZM193.315 100.785H174.987L184.151 86.1174L193.315 100.785Z" fill="currentColor"/>
+                        <path d="M244.164 107.374C241.268 108.158 234.496 108.158 234.301 108.158C234.301 108.158 227.365 108.17 224.43 107.374C220.5 106.308 216.647 104.634 216.647 96.8395C216.647 89.0451 220.496 87.3746 224.43 86.3052V86.3169C227.373 85.5207 234.301 85.5324 234.301 85.5324C234.496 85.5324 241.658 85.5324 244.554 86.3169C247.458 87.1053 250.178 88.3309 251.224 91.8982H259.21C258.886 88.9788 258.121 86.9219 256.868 85.2826C254.472 82.1602 250.955 80.923 247.403 79.955C242.735 78.6944 234.504 78.6944 234.309 78.6944C234.309 78.6944 225.929 78.6748 221.202 79.955C214.879 81.6645 208.681 84.3147 208.681 96.8434C208.681 109.372 214.879 112.022 221.202 113.732C225.929 115.012 234.309 114.992 234.309 114.992C234.512 114.992 242.735 114.992 247.403 113.732C250.963 112.768 254.479 111.534 256.868 108.404C258.121 106.769 258.886 104.704 259.206 101.788H251.228C250.182 105.36 247.068 106.581 244.164 107.37V107.374Z" fill="currentColor"/>
+                        <path d="M4 78.7215L29.5296 94.8292L55.0631 78.7215L29.5296 35L4 78.7215Z" fill="currentColor"/>
+                    </svg>
+                    <span>Created by FRACTAL</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Analysis Page -->
+        <section id="page-analysis" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">Новий аналіз</h1>
+                <p class="page-subtitle">Завантажте транскрипт інтерв'ю для психолінгвістичного аналізу</p>
+            </div>
+
+            <div id="apiWarning" class="alert alert-warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/>
+                </svg>
+                <span>API-ключ не налаштовано. <a href="#" onclick="showPage('settings'); return false;">Перейдіть до налаштувань</a> для підключення до OpenRouter.</span>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Інформація про кандидата</h3>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ім'я кандидата *</label>
+                        <input type="text" class="form-input" id="candidateFirstName" placeholder="Іван">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Прізвище кандидата *</label>
+                        <input type="text" class="form-input" id="candidateLastName" placeholder="Петренко">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Транскрипт інтерв'ю</h3>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active" data-tab="upload">Завантажити файл</div>
+                    <div class="tab" data-tab="paste">Вставити текст</div>
+                </div>
+
+                <div id="tab-upload" class="tab-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                        </div>
+                        <div class="upload-title">Перетягніть файл сюди</div>
+                        <div class="upload-subtitle">або натисніть для вибору файлу (.txt, .docx, .pdf)</div>
+                        <input type="file" id="fileInput" hidden accept=".txt,.docx,.pdf">
+                    </div>
+                    <div id="fileInfo" style="display: none; margin-top: 16px; padding: 16px; background: var(--bg-tertiary); border-radius: 10px;">
+                        <span id="fileName"></span>
+                        <button onclick="clearFile()" style="float: right; background: none; border: none; color: var(--text-muted); cursor: pointer;">✕</button>
+                    </div>
+                </div>
+
+                <div id="tab-paste" class="tab-content" style="display: none;">
+                    <textarea class="form-textarea" id="textInput" placeholder="Вставте текст транскрипту тут..." style="min-height: 200px;"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="vacancyEnabled">
+                            <span class="checkmark"></span>
+                        </label>
+                        <h3 class="card-title">Вакансія</h3>
+                    </div>
+                </div>
+                <div id="vacancyContent">
+                    <textarea class="form-textarea" id="vacancyInput" placeholder="Вставте текст вакансії з вимогами тут..." style="min-height: 150px;"></textarea>
+                    <p class="form-hint" style="margin-top: 8px;">Вкажіть вимоги до кандидата: досвід роботи, навички, освіта тощо</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="resumeEnabled">
+                            <span class="checkmark"></span>
+                        </label>
+                        <h3 class="card-title">Резюме</h3>
+                    </div>
+                </div>
+                <div id="resumeContent">
+                    <textarea class="form-textarea" id="resumeInput" placeholder="Вставте текст резюме кандидата тут..." style="min-height: 150px;"></textarea>
+                    <p class="form-hint" style="margin-top: 8px;">Резюме буде проаналізовано на відповідність вимогам вакансії</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" id="startAnalysisBtn" onclick="startAnalysis()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    Запустити аналіз
+                </button>
+            </div>
+        </section>
+
+        <!-- History Page -->
+        <section id="page-history" class="page">
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h1 class="page-title">Історія аналізів</h1>
+                    <p class="page-subtitle">Переглядайте результати попередніх аналізів</p>
+                </div>
+                <button class="btn" style="background: rgba(248, 113, 113, 0.15); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3);" onclick="deleteAllAnalyses()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    </svg>
+                    Видалити всі
+                </button>
+            </div>
+
+            <div class="analysis-grid" id="historyGrid">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Settings Page -->
+        <section id="page-settings" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Налаштування</h1>
+                <p class="page-subtitle">Конфігурація моделі ШІ та шкал аналізу</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Підключення до OpenRouter</h3>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">API-ключ OpenRouter</label>
+                    <input type="password" class="form-input" id="apiKey" placeholder="sk-or-v1-..." oninput="checkApiKey()">
+                    <p class="form-hint">
+                        Отримайте API-ключ на <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>.
+                        Поповніть баланс на <a href="https://openrouter.ai/credits" target="_blank">openrouter.ai/credits</a>
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Модель ШІ</label>
+                    <div style="display: flex; gap: 8px;">
+                        <select class="form-select" id="aiModel" style="flex: 1;"></select>
+                        <button class="btn btn-secondary btn-sm" onclick="openModelsModal()" title="Керувати моделями">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Системний промпт</h3>
+                    <button class="btn btn-success btn-sm" id="savePromptBtn" onclick="saveSystemPrompt()" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                            <polyline points="17,21 17,13 7,13 7,21"/>
+                            <polyline points="7,3 7,8 15,8"/>
+                        </svg>
+                        Зберегти зміни
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <div class="textarea-wrapper">
+                        <textarea class="form-textarea" id="systemPrompt" style="min-height: 150px;" oninput="onSystemPromptChange()">Ти — експерт з психолінгвістичного аналізу мовлення. Твоя задача — аналізувати транскрипти інтерв'ю та оцінювати психологічні характеристики кандидатів на основі їхнього мовлення. Дотримуйся наукового підходу та оцінюй лише ті маркери, що явно присутні в тексті. Для кожної шкали виводь лише одне число від 0 до 10.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Промпт для аналізу відповідності вимогам</h3>
+                    <button class="btn btn-success btn-sm" id="saveRequirementsPromptBtn" onclick="saveRequirementsPrompt()" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                            <polyline points="17,21 17,13 7,13 7,21"/>
+                            <polyline points="7,3 7,8 15,8"/>
+                        </svg>
+                        Зберегти
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <div class="textarea-wrapper">
+                        <textarea class="form-textarea" id="requirementsPrompt" style="min-height: 200px;" oninput="onRequirementsPromptChange()">Ти — HR-експерт. Проаналізуй текст вакансії та визнач ключові вимоги до кандидата. Потім для кожної вимоги перевір:
+1. Чи є відповідність цій вимозі в резюме кандидата
+2. Чи є підтвердження або спростування цієї вимоги в транскрипті інтерв'ю
+
+Поверни результат у форматі JSON масиву:
+[
+  {
+    "requirement": "назва вимоги",
+    "resumeMatch": "yes" | "no" | "unclear",
+    "interviewMatch": "yes" | "no" | "unclear",
+    "comment": "короткий коментар"
+  }
+]
+
+Правила оцінки:
+- "yes" — вимога чітко підтверджена
+- "no" — вимога не виконана або спростована
+- "unclear" — недостатньо інформації для висновку
+
+Поверни ТІЛЬКИ JSON без додаткового тексту.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Шкали аналізу</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary btn-sm" onclick="toggleAllScales(true)">
+                            Увімкнути всі
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="toggleAllScales(false)">
+                            Вимкнути всі
+                        </button>
+                        <button class="btn btn-secondary" onclick="openAddScaleModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Додати шкалу
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scale-list" id="scaleList">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Page -->
+        <section id="page-results" class="page">
+            <div class="results-header" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <button class="back-btn" onclick="showPage('history')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="page-title" id="resultsTitle">Результати аналізу</h1>
+                        <p class="page-subtitle" id="resultsSubtitle">Кандидат: Іван Петренко</p>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="exportToPDF()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="12" y2="18"/>
+                        <line x1="15" y1="15" x2="12" y2="18"/>
+                    </svg>
+                    Експорт PDF
+                </button>
+            </div>
+
+            <div class="results-summary" id="resultsSummary">
+                <!-- Will be populated by JS -->
+            </div>
+
+            <div id="resultsContent">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Processing Overlay -->
+    <div class="processing-overlay" id="processingOverlay">
+        <div class="processing-content">
+            <div class="processing-spinner"></div>
+            <div class="processing-title">Аналізуємо транскрипт...</div>
+            <div class="processing-subtitle" id="processingStatus">Обробка тексту</div>
+            <div class="processing-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text"><span id="progressText">0</span> / 20 шкал</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Models Management Modal -->
+    <div class="modal-overlay" id="modelsModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Керування моделями ШІ</h3>
+                <button class="modal-close" onclick="closeModelsModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <button class="btn btn-primary btn-sm" onclick="addNewModel()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Додати модель
+                </button>
+            </div>
+
+            <div id="modelsList" style="max-height: 400px; overflow-y: auto;"></div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModelsModal()">Закрити</button>
+                <button class="btn btn-success" onclick="saveModelsToServer()">Зберегти на сервер</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Model Modal -->
+    <div class="modal-overlay" id="modelEditModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modelEditTitle">Додати модель</h3>
+                <button class="modal-close" onclick="closeModelEditModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ID моделі (OpenRouter) *</label>
+                <input type="text" class="form-input" id="modelId" placeholder="anthropic/claude-sonnet-4">
+                <p class="form-hint">Знайдіть ID на <a href="https://openrouter.ai/models" target="_blank">openrouter.ai/models</a></p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Назва для відображення *</label>
+                <input type="text" class="form-input" id="modelName" placeholder="Claude Sonnet 4">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Провайдер *</label>
+                <input type="text" class="form-input" id="modelProvider" placeholder="Anthropic">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModelEditModal()">Скасувати</button>
+                <button class="btn btn-primary" onclick="saveModelEdit()">Зберегти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Scale Modal -->
+    <div class="modal-overlay" id="scaleModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title" id="scaleModalTitle">Додати шкалу</h3>
+                <button class="modal-close" onclick="closeScaleModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Назва шкали *</label>
+                    <input type="text" class="form-input" id="scaleName" placeholder="Наприклад: Сумлінність">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Методика / Опитувальник *</label>
+                    <input type="text" class="form-input" id="scaleCategory" placeholder="Наприклад: Big Five, HEXACO, Dark Triad">
+                    <p class="form-hint">Введіть назву методики або опитувальника, до якого належить шкала</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Промпт для аналізу *</label>
+                <div class="textarea-wrapper">
+                    <textarea class="form-textarea" id="scaleInstructions" style="min-height: 350px;" placeholder="Введіть детальні інструкції для оцінювання цієї шкали...
+
+Приклад структури:
+- Категорії психолінгвістичних маркерів (A-G)
+- Шкала оцінювання (0-10)
+- Правила підрахунку
+- Українські та російські еквіваленти"></textarea>
+                    <button class="expand-btn" onclick="expandTextarea()" title="Розгорнути на весь екран">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                            <polyline points="15,3 21,3 21,9"/><polyline points="9,21 3,21 3,15"/>
+                            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeScaleModal()">Скасувати</button>
+                <button class="btn btn-primary" onclick="saveScale()">Зберегти шкалу</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Textarea Modal -->
+    <div class="modal-overlay" id="fullscreenModal">
+        <div class="modal" style="max-width: 95vw; max-height: 95vh; height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <h3 class="modal-title">Редагування промпту</h3>
+                <button class="modal-close" onclick="closeFullscreenModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <textarea class="form-textarea" id="fullscreenTextarea" style="flex: 1; min-height: 0; resize: none;"></textarea>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeFullscreenModal()">Скасувати</button>
+                <button class="btn btn-primary" onclick="applyFullscreenText()">Застосувати</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; color: var(--success);">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+        </svg>
+        <span id="toastText">Збережено успішно</span>
+    </div>
+
+    <script>
+        // Data loaded from server API
+        let scales = [];
+        let analysisHistory = [];
+        let models = [];
+        let systemPromptFromServer = '';
+        let originalSystemPrompt = '';
+        let requirementsPromptFromServer = '';
+        let originalRequirementsPrompt = '';
+        let uploadedFileContent = '';
+        let dataLoaded = false;
+        let editingModelIndex = null;
+
+        // Initialize app - load data from server
+        async function initApp() {
+            try {
+                // Load prompts, scales and models
+                const promptsRes = await fetch('/api/prompts');
+                const promptsData = await promptsRes.json();
+
+                scales = promptsData.scales || [];
+                models = promptsData.models || [];
+                systemPromptFromServer = promptsData.systemPrompt || '';
+                requirementsPromptFromServer = promptsData.requirementsPrompt || document.getElementById('requirementsPrompt').value;
+
+                // Load history
+                const historyRes = await fetch('/api/history');
+                analysisHistory = await historyRes.json();
+
+                dataLoaded = true;
+
+                // Set system prompt in textarea
+                document.getElementById('systemPrompt').value = systemPromptFromServer;
+                originalSystemPrompt = systemPromptFromServer;
+
+                // Set requirements prompt if loaded from server
+                if (promptsData.requirementsPrompt) {
+                    document.getElementById('requirementsPrompt').value = requirementsPromptFromServer;
+                }
+                originalRequirementsPrompt = document.getElementById('requirementsPrompt').value;
+
+                // Render models dropdown
+                renderModelsDropdown();
+
+                // Load local settings (API key, model)
+                loadLocalSettings();
+
+                // Render UI
+                renderScales();
+                renderHistory();
+
+                console.log('LITI initialized: ' + scales.length + ' scales, ' + models.length + ' models, ' + analysisHistory.length + ' analyses');
+            } catch (error) {
+                console.error('Failed to load data from server:', error);
+                showToast('Помилка завантаження даних');
+            }
+        }
+
+        // Render models dropdown
+        function renderModelsDropdown() {
+            const select = document.getElementById('aiModel');
+            const providers = [...new Set(models.map(m => m.provider))];
+
+            select.innerHTML = providers.map(provider => {
+                const providerModels = models.filter(m => m.provider === provider);
+                return `
+                    <optgroup label="${provider}">
+                        ${providerModels.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}
+                    </optgroup>
+                `;
+            }).join('');
+        }
+
+        // Models management
+        function openModelsModal() {
+            renderModelsList();
+            document.getElementById('modelsModal').classList.add('active');
+        }
+
+        function closeModelsModal() {
+            document.getElementById('modelsModal').classList.remove('active');
+        }
+
+        function renderModelsList() {
+            const container = document.getElementById('modelsList');
+            const providers = [...new Set(models.map(m => m.provider))];
+
+            container.innerHTML = providers.map(provider => {
+                const providerModels = models.filter(m => m.provider === provider);
+                return `
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="margin-bottom: 8px; color: var(--text-secondary);">${provider}</h4>
+                        ${providerModels.map((m, idx) => {
+                            const globalIdx = models.indexOf(m);
+                            return `
+                                <div style="display: flex; align-items: center; padding: 8px 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 4px;">
+                                    <span style="flex: 1;">${m.name}</span>
+                                    <span style="color: var(--text-muted); font-size: 12px; margin-right: 12px;">${m.id}</span>
+                                    <button class="btn btn-secondary btn-sm" onclick="editModel(${globalIdx})" style="margin-right: 4px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="deleteModel(${globalIdx})" style="color: var(--danger);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                            <polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addNewModel() {
+            editingModelIndex = null;
+            document.getElementById('modelEditTitle').textContent = 'Додати модель';
+            document.getElementById('modelId').value = '';
+            document.getElementById('modelName').value = '';
+            document.getElementById('modelProvider').value = '';
+            document.getElementById('modelEditModal').classList.add('active');
+        }
+
+        function editModel(index) {
+            editingModelIndex = index;
+            const model = models[index];
+            document.getElementById('modelEditTitle').textContent = 'Редагувати модель';
+            document.getElementById('modelId').value = model.id;
+            document.getElementById('modelName').value = model.name;
+            document.getElementById('modelProvider').value = model.provider;
+            document.getElementById('modelEditModal').classList.add('active');
+        }
+
+        function closeModelEditModal() {
+            document.getElementById('modelEditModal').classList.remove('active');
+        }
+
+        function saveModelEdit() {
+            const id = document.getElementById('modelId').value.trim();
+            const name = document.getElementById('modelName').value.trim();
+            const provider = document.getElementById('modelProvider').value.trim();
+
+            if (!id || !name || !provider) {
+                alert('Заповніть всі поля');
+                return;
+            }
+
+            if (editingModelIndex !== null) {
+                models[editingModelIndex] = { id, name, provider };
+            } else {
+                models.push({ id, name, provider });
+            }
+
+            renderModelsList();
+            renderModelsDropdown();
+            closeModelEditModal();
+            showToast('Модель збережено');
+        }
+
+        function deleteModel(index) {
+            if (confirm('Видалити цю модель?')) {
+                models.splice(index, 1);
+                renderModelsList();
+                renderModelsDropdown();
+                showToast('Модель видалено');
+            }
+        }
+
+        async function saveModelsToServer() {
+            try {
+                await fetch('/api/models', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ models })
+                });
+                showToast('Моделі збережено на сервер');
+                closeModelsModal();
+            } catch (error) {
+                console.error('Failed to save models:', error);
+                showToast('Помилка збереження');
+            }
+        }
+
+        // Load local settings from localStorage (only API key and model)
+        function loadLocalSettings() {
+            const savedApiKey = localStorage.getItem('liti_apiKey');
+            const savedModel = localStorage.getItem('liti_model');
+
+            if (savedApiKey) {
+                document.getElementById('apiKey').value = savedApiKey;
+            }
+            if (savedModel) {
+                document.getElementById('aiModel').value = savedModel;
+            }
+            checkApiKey();
+        }
+
+        // Save prompts to server
+        async function savePromptsToServer() {
+            try {
+                await fetch('/api/prompts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        systemPrompt: document.getElementById('systemPrompt').value,
+                        requirementsPrompt: document.getElementById('requirementsPrompt').value,
+                        scales: scales,
+                        models: models
+                    })
+                });
+                return true;
+            } catch (error) {
+                console.error('Failed to save prompts:', error);
+                return false;
+            }
+        }
+
+        // Save history to server
+        async function saveHistoryToServer() {
+            try {
+                await fetch('/api/history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(analysisHistory)
+                });
+                return true;
+            } catch (error) {
+                console.error('Failed to save history:', error);
+                return false;
+            }
+        }
+
+        // Add analysis to server
+        async function addAnalysisToServer(analysis) {
+            try {
+                await fetch('/api/history/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(analysis)
+                });
+                return true;
+            } catch (error) {
+                console.error('Failed to add analysis:', error);
+                return false;
+            }
+        }
+
+        // Legacy compatibility - keeping old variable name reference
+        const scalePrompts = {
+            conscientiousness: `Шкала Сумлінності (Conscientiousness).
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі робочих ситуацій, виконання завдань, планування та досягнення цілей.
+Ігноруй самоописи та прямі твердження на кшталт «я організований» або «я відповідальний».
+Не роби припущень щодо того, що не виражено безпосередньо в мові.
+Якщо маркери з різних рівнів присутні одночасно, завжди обирай нижчий бал.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ СУМЛІННОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ (вибір слів):
+- Слова досягнення та завершення: «завершив», «досяг», «виконав», «реалізував», «здійснив», «впровадив», «закінчив», «довів до кінця», «результат», «успіх», «мета досягнута»
+- Лексика планування та організації: «план», «графік», «розклад», «етапи», «кроки», «структура», «система», «порядок», «пріоритет», «послідовність», «методично»
+- Слова контролю якості: «перевірив», «проконтролював», «переконався», «звірив», «уточнив», «деталі», «точність», «ретельно», «уважно», «акуратно»
+- Часова лексика (майбутній та теперішній фокус): «заздалегідь», «наперед», «потім», «далі», «наступним кроком», «після цього», «спочатку», «на завершення»
+- Слова відповідальності: «відповідав за», «взяв на себе», «моя зона», «забезпечив», «гарантував», «слідкував», «контролював», «доручено мені»
+
+B. СИНТАКСИЧНІ МАРКЕРИ (структура речень):
+- Послідовні конструкції: «спочатку... потім... далі... на завершення» — логічна структура викладу
+- Причинно-наслідкові зв'язки: «тому що», «через те що», «завдяки чому», «в результаті», «що призвело до»
+- Повні, завершені речення з чіткою структурою (підмет-присудок-додаток)
+
+C. МАРКЕРИ ВІДСУТНОСТІ СУМЛІННОСТІ (негативні індикатори):
+- Невизначена лексика: «якось», «десь», «приблизно», «може», «напевно», «не пам'ятаю точно»
+- Зовнішня атрибуція: «мені не сказали», «вони не пояснили», «через інших», «обставини завадили»
+- Слова уникання: «не встиг», «не вийшло», «залишилось», «відклав», «забув»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика планування, конкретика з метриками, повна відсутність негативних маркерів
+- Бал 7-8: регулярна організаційна лексика, фокус на завершенні, увага до деталей
+- Бал 4-6: базові згадки про планування, помірна мова завершення
+- Бал 2-3: невизначена мова, зовнішня атрибуція, мінімальне планування
+- Бал 0-1: мова незавершення, описи хаосу, уникання відповідальності
+
+Виводь лише одне число.`,
+
+            extraversion: `Шкала Екстраверсії (Extraversion).
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі соціальних ситуацій, взаємодії з людьми, емоційних переживань та стилю комунікації.
+Ігноруй самоописи та прямі твердження на кшталт «я комунікабельний» або «я екстраверт».
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ЕКСТРАВЕРСІЇ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ:
+- Соціальні слова: «друзі», «люди», «зустріч», «команда», «компанія», «ми», «разом», «колеги», «група»
+- Слова позитивних емоцій: «чудово», «супер», «класно», «весело», «радість», «щасливий», «задоволений», «енергія»
+- Займенники 2-ї особи та 1-ї множини: «ти», «ви», «ми», «нам», «вам», «нас» (частіше ніж «я» самостійно)
+- Мова домінування та ініціативи: «запропонував», «очолив», «повів», «ініціював», «організував»
+
+B. СИНТАКСИЧНІ МАРКЕРИ:
+- Прості, короткі речення з прямою структурою
+- Часте використання окличних речень та емоційних вигуків
+- Неформальний, розмовний стиль викладу
+
+C. МАРКЕРИ ІНТРОВЕРСІЇ (негативні індикатори):
+- Фокус на самотніх заняттях: «читаю», «думаю», «аналізую», «спостерігаю», «розмірковую»
+- Слова невпевненості: «можливо», «мабуть», «напевно», «здається», «якось»
+- Довгі, складні речення з багатьма підрядними конструкціями
+- Мало згадок про інших людей та соціальні події
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: домінування соціальної лексики, висока позитивна емоційність, мова ініціативи
+- Бал 7-8: регулярна соціальна лексика, позитивний емоційний тон
+- Бал 4-6: змішана соціальна лексика, помірна емоційність
+- Бал 2-3: обмежена соціальна лексика, часті слова невпевненості
+- Бал 0-1: відсутність соціальної лексики, фокус на самотності
+
+Виводь лише одне число.`,
+
+            agreeableness: `Шкала Приязності (Agreeableness).
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі взаємодій з іншими людьми, конфліктних ситуацій, командної роботи та ставлення до колег.
+Ігноруй самоописи та прямі твердження на кшталт «я добра людина» або «я завжди допомагаю».
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ПРИЯЗНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ:
+- Слова співпраці та підтримки: «допоміг», «підтримав», «разом», «спільно», «співпрацювали», «команда», «погодився», «поступився»
+- Слова емпатії та розуміння: «зрозумів», «відчув», «співчуваю», «підтримую», «прислухався», «вислухав»
+- Позитивна соціальна лексика: «довіра», «повага», «вдячний», «щирий», «відкритий», «чесний», «турбота»
+- Позитивні оцінки інших: «талановитий», «здібний», «молодець», «чудово зробив», «вмілий»
+
+B. СИНТАКСИЧНІ МАРКЕРИ:
+- М'які, неагресивні конструкції: «можливо варто», «думаю що», «мені здається»
+- Конструкції згоди: «так, і ще...», «погоджуюсь, до того ж...»
+- Відсутність імперативу та наказових речень
+
+C. МАРКЕРИ АНТАГОНІЗМУ (негативні індикатори):
+- Слова конфронтації: «сперечався», «не погодився», «відстоював», «наполягав», «боровся»
+- Негативні оцінки інших: «некомпетентний», «дурний», «невмілий», «безвідповідальний»
+- Категоричні конструкції: «однозначно», «безумовно», «очевидно», «без сумніву»
+- Звинувачувальна мова: «через нього», «він винен», «їхня провина»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика співпраці, активна емпатія, визнання заслуг інших
+- Бал 7-8: регулярна лексика співпраці, позитивний тон при описі колег
+- Бал 4-6: змішана лексика, баланс позитивних та критичних оцінок
+- Бал 2-3: переважання конфронтаційної лексики, критичні оцінки інших
+- Бал 0-1: домінування антагоністичної лексики, відкрита негативна оцінка людей
+
+Виводь лише одне число.`,
+
+            neuroticism: `Шкала Нейротизму (Neuroticism) / Емоційної нестабільності.
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі стресових ситуацій, труднощів, невдач та емоційних переживань.
+Ігноруй самоописи та прямі твердження на кшталт «я тривожний» або «я спокійний».
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ НЕЙРОТИЗМУ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ:
+- Слова негативних емоцій: «хвилювався», «нервував», «боявся», «переживав», «тривожився», «злився», «засмучувався»
+- Лексика тривоги та страху: «страх», «тривога», «паніка», «жах», «побоювання», «невпевненість»
+- Слова самокритики: «моя провина», «не справився», «погано зробив», «не вмію», «не здатний»
+- Лексика катастрофізації: «жахливо», «кошмар», «катастрофа», «все пропало», «кінець», «безнадійно»
+
+B. СИНТАКСИЧНІ МАРКЕРИ:
+- Умовні конструкції з негативним результатом: «а якщо не вийде», «що якщо щось піде не так»
+- Незавершені речення та обривання думки
+- Конструкції руминації: «постійно думав», «не міг перестати думати»
+
+C. МАРКЕРИ ЕМОЦІЙНОЇ СТАБІЛЬНОСТІ (негативні індикатори):
+- Слова спокою: «спокійно», «врівноважено», «без паніки», «контролював ситуацію»
+- Лексика опанування: «впорався», «справився», «подолав», «вирішив», «знайшов вихід»
+- Позитивне переосмислення: «досвід», «урок», «можливість навчитися»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: домінування негативної емоційної лексики, катастрофізація, руминація
+- Бал 7-8: регулярна негативна емоційна лексика, фокус на проблемах
+- Бал 4-6: змішана емоційна лексика, баланс проблем та рішень
+- Бал 2-3: переважання лексики опанування, раціональний підхід
+- Бал 0-1: домінування лексики спокою та контролю
+
+Виводь лише одне число.`,
+
+            openness: `Шкала Відкритості досвіду (Openness to Experience).
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі нових ідей, творчих завдань, змін, навчання та інтелектуальних інтересів.
+Ігноруй самоописи та прямі твердження на кшталт «я креативний» або «я люблю нове».
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ВІДКРИТОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ:
+- Слова новизни та змін: «новий», «інший», «незвичний», «інноваційний», «оригінальний», «нестандартний»
+- Лексика креативності: «ідея», «придумав», «винайшов», «створив», «уявив», «експериментував»
+- Слова допитливості: «цікаво», «дослідив», «вивчив», «дізнався», «занурився», «розібрався»
+- Абстрактна та філософська лексика: «концепція», «теорія», «принцип», «сенс», «значення»
+
+B. СИНТАКСИЧНІ МАРКЕРИ:
+- Складні речення з багатьма ідеями
+- Метафори та порівняння: «це як...», «ніби...», «схоже на...»
+- Умовні конструкції для гіпотетичних сценаріїв: «а що якщо...», «уявімо що...»
+
+C. МАРКЕРИ КОНСЕРВАТИЗМУ (негативні індикатори):
+- Слова традиції та стабільності: «як завжди», «перевірений спосіб», «традиційно», «звично»
+- Лексика уникання змін: «навіщо змінювати», «і так працює», «краще по-старому»
+- Фокус на процедурах та правилах: «за інструкцією», «як прописано», «згідно правил»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: домінування лексики новизни та креативності, абстрактне мислення
+- Бал 7-8: регулярна лексика новизни, інтелектуальна допитливість
+- Бал 4-6: змішана лексика, помірна допитливість
+- Бал 2-3: переважання практичної лексики, фокус на перевірених методах
+- Бал 0-1: домінування консервативної лексики, уникання нового
+
+Виводь лише одне число.`,
+
+            honestyHumility: `Шкала Чесності-Смиренності (Honesty-Humility) — HEXACO модель.
+Оцінка повинна бути одним числом від 0 до 10.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі етичних дилем, взаємодій з ресурсами, визнання помилок та ставлення до статусу і влади.
+Ігноруй самоописи та прямі твердження на кшталт «я чесна людина» або «я скромний».
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ЧЕСНОСТІ:
+- Слова правдивості: «чесно», «відверто», «правда», «насправді», «щиро», «прямо скажу»
+- Лексика визнання помилок: «помилився», «був неправий», «не вийшло», «міг краще», «моя провина»
+- Слова скромності: «мені пощастило», «завдяки команді», «нічого особливого», «як і всі»
+
+B. МАРКЕРИ НЕЧЕСНОСТІ ТА ЗАРОЗУМІЛОСТІ (негативні індикатори):
+- Слова самовихваляння: «я найкращий», «тільки я зміг», «ніхто інший не...», «виключно моя заслуга»
+- Лексика маніпуляції: «переконав», «змусив», «обійшов правила», «знайшов лазівку»
+- Применшення інших: «вони не змогли», «на відміну від них», «інші не здатні»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика чесності, визнання помилок, скромність
+- Бал 7-8: регулярна лексика чесності та прозорості
+- Бал 4-6: змішана картина, баланс чесності і самовихваляння
+- Бал 2-3: переважання самовихваляння, мало визнання помилок
+- Бал 0-1: домінування самовихваляння, маніпулятивна лексика
+
+Виводь лише одне число.`,
+
+            narcissism: `Шкала Нарцисизму (Narcissism) — Dark Triad.
+Оцінка повинна бути одним числом від 0 до 10.
+УВАГА: Високий бал = високий нарцисизм (негативна риса). Низький бал = здорова самооцінка.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі власних досягнень, взаємодії з іншими, ставлення до критики та потреби у визнанні.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ НАРЦИСИЗМУ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ГРАНДІОЗНОСТІ:
+- Слова самовозвеличення: «найкращий», «унікальний», «виключний», «неперевершений», «видатний»
+- Лексика особливості: «тільки я», «ніхто інший», «єдиний хто», «особливий випадок»
+- Займенники «я» в надмірній кількості: домінування «я», «мій», «моє», «мені» над колективними
+
+B. ЛЕКСИЧНІ МАРКЕРИ ЗНЕВАГИ ДО ІНШИХ:
+- Применшення інших: «вони не змогли», «некомпетентні», «не на моєму рівні»
+- Слова зверхності: «я їм показав», «довів що кращий», «перевершив їх»
+
+C. МАРКЕРИ ЗДОРОВОЇ САМООЦІНКИ (негативні індикатори для нарцисизму):
+- Визнання помилок: «помилився», «міг краще», «є що покращувати»
+- Скромність: «завдяки команді», «пощастило», «звичайна робота»
+- Визнання заслуг інших: «колега запропонував», «керівник допоміг», «команда молодці»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: домінування грандіозної лексики, зневага до інших
+- Бал 7-8: регулярна грандіозна лексика, складність з прийняттям критики
+- Бал 4-6: змішана картина, впевненість з деякою скромністю
+- Бал 2-3: переважання скромної лексики, визнання помилок
+- Бал 0-1: домінування скромності, активне визнання заслуг інших
+
+Виводь лише одне число.`,
+
+            machiavellianism: `Шкала Макіавеллізму (Machiavellianism) — Dark Triad.
+Оцінка повинна бути одним числом від 0 до 10.
+УВАГА: Високий бал = високий макіавеллізм (негативна риса). Низький бал = щира, етична поведінка.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі стратегій досягнення цілей, взаємодії з людьми, ставлення до правил та етики.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ МАКІАВЕЛЛІЗМУ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ МАНІПУЛЯЦІЇ:
+- Слова впливу та переконання: «переконав», «схилив», «вплинув», «направив», «підштовхнув»
+- Лексика стратегічного мислення: «стратегія», «тактика», «прорахував», «передбачив реакцію»
+- Слова використання людей: «використав його зв'язки», «скористався її знаннями»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ЦИНІЗМУ:
+- Слова недовіри до людей: «всі переслідують свої інтереси», «кожен за себе»
+- Лексика прагматизму: «головне результат», «мета виправдовує», «бізнес є бізнес»
+
+C. МАРКЕРИ ЩИРОСТІ ТА ЕТИЧНОСТІ (негативні індикатори):
+- Слова чесності: «чесно», «відверто», «прямо скажу», «без хитрощів»
+- Слова етики: «це було б неправильно», «непорядно», «не можу так вчинити»
+- Визнання цінності правил: «правила є правила», «так не можна», «це принцип»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична маніпулятивна лексика, цинічне світобачення
+- Бал 7-8: регулярна лексика впливу, деякий цинізм
+- Бал 4-6: змішана картина, присутній і прагматизм, і етика
+- Бал 2-3: переважання етичної лексики, довіра до людей
+- Бал 0-1: домінування лексики чесності, глибока довіра до людей
+
+Виводь лише одне число.`,
+
+            psychopathy: `Шкала Психопатії (Psychopathy) — Dark Triad.
+Оцінка повинна бути одним числом від 0 до 10.
+УВАГА: Високий бал = високі субклінічні риси психопатії (негативна риса). Низький бал = емпатія та відповідальність.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі ставлення до інших людей, емоційних реакцій, імпульсивності та відповідальності за свої дії.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ПСИХОПАТІЇ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ВІДСУТНОСТІ ЕМПАТІЇ:
+- Холодні описи людей: «ресурс», «інструмент», «засіб», «фігура»
+- Байдужі реакції: «мені байдуже», «не моя справа», «не цікавить», «яка різниця»
+- Відсутність слів співчуття: немає «шкода», «співчуваю», «розумію як важко»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ІМПУЛЬСИВНОСТІ:
+- Слова спонтанності без обдумування: «просто зробив», «не думав», «само вийшло»
+- Відсутність планування: «там розберемось», «по ходу», «якось буде»
+
+C. МАРКЕРИ ЕМПАТІЇ ТА ВІДПОВІДАЛЬНОСТІ (негативні індикатори):
+- Слова емпатії: «співчуваю», «розумію як йому», «уявив себе на його місці»
+- Лексика турботи: «хвилювався за нього», «переживав», «хотів допомогти»
+- Слова провини та каяття: «шкодую», «не слід було», «моя провина»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична відсутність емпатії, імпульсивність, відсутність провини
+- Бал 7-8: регулярна відсутність емоційних слів, деяка імпульсивність
+- Бал 4-6: змішана картина, присутні і холодні, і теплі описи
+- Бал 2-3: переважання емпатійної лексики, обдумані рішення
+- Бал 0-1: домінування емпатії, глибока турбота, активне каяття
+
+Виводь лише одне число.`,
+
+            hope: `Шкала Надії (Hope) — Psychological Capital (PsyCap).
+Оцінка повинна бути одним числом від 0 до 10.
+Надія в PsyCap = Willpower (енергія до цілі) + Waypower (шляхи досягнення).
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі цілей, шляхів їх досягнення, подолання перешкод та планування майбутнього.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ НАДІЇ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ WILLPOWER:
+- Слова цілеспрямованості: «ціль», «мета», «прагну», «хочу досягти», «націлений на»
+- Слова рішучості: «вирішив», «твердо», «обов'язково», «неодмінно», «без сумніву зроблю»
+- Лексика наполегливості: «не здамся», «буду продовжувати», «йду до кінця»
+
+B. ЛЕКСИЧНІ МАРКЕРИ WAYPOWER:
+- Слова альтернативних шляхів: «інший спосіб», «альтернатива», «варіант», «план Б»
+- Лексика гнучкості: «якщо не вийде так, то», «спробую інакше», «адаптуюсь»
+- Слова планування: «етапи», «кроки», «послідовність», «стратегія»
+
+C. МАРКЕРИ БЕЗНАДІЇ (негативні індикатори):
+- Слова безнадії: «безнадійно», «немає сенсу», «нічого не вийде», «все марно»
+- Лексика тупика: «глухий кут», «без виходу», «нікуди», «немає варіантів»
+- Фаталізм: «як буде так буде», «від мене не залежить», «доля вирішить»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: чіткі цілі, висока енергія, множинні шляхи, детальне планування
+- Бал 7-8: наявність цілей, енергія та мотивація, альтернативні шляхи
+- Бал 4-6: деякі цілі, помірна енергія, обмежені альтернативи
+- Бал 2-3: нечіткі цілі, низька енергія, мало альтернатив
+- Бал 0-1: відсутність цілей та енергії, фаталізм, капітуляція
+
+Виводь лише одне число.`,
+
+            efficacy: `Шкала Самоефективності (Self-Efficacy) — Psychological Capital (PsyCap).
+Оцінка повинна бути одним числом від 0 до 10.
+Самоефективність = впевненість у здатності мобілізувати ресурси для виконання конкретних завдань.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі своїх здібностей справлятися із завданнями, віри у власні сили та підходу до складних викликів.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ САМОЕФЕКТИВНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ВПЕВНЕНОСТІ У ЗДІБНОСТЯХ:
+- Слова здатності: «можу», «здатний», «вмію», «справлюсь», «впораюсь», «зроблю»
+- Лексика компетентності: «знаю як», «маю досвід», «володію», «розумію», «опанував»
+- Слова впевненості: «впевнений», «переконаний», «знаю що можу», «не сумніваюсь»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ПРИЙНЯТТЯ ВИКЛИКІВ:
+- Слова готовності: «готовий взятися», «візьму на себе», «братимусь», «спробую»
+- Лексика виклику: «цікавий виклик», «хочу спробувати», «новий досвід», «можливість»
+
+C. МАРКЕРИ НИЗЬКОЇ САМОЕФЕКТИВНОСТІ (негативні індикатори):
+- Слова невпевненості: «не знаю чи зможу», «не впевнений», «сумніваюсь», «навряд чи»
+- Слова уникання: «краще хтось інший», «не візьмусь», «не моя сфера», «не впораюсь»
+- Слова страху: «боюсь не впоратись», «страшно братися», «а раптом не вийде»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична впевненість, активне прийняття викликів, посилання на успішний досвід
+- Бал 7-8: регулярна впевненість у здібностях, готовність до викликів
+- Бал 4-6: змішана впевненість, помірна готовність до викликів
+- Бал 2-3: переважання сумнівів, уникання викликів
+- Бал 0-1: домінування невпевненості, активне уникання, страх невдачі
+
+Виводь лише одне число.`,
+
+            resilience: `Шкала Стійкості (Resilience) — Psychological Capital (PsyCap).
+Оцінка повинна бути одним числом від 0 до 10.
+Стійкість = здатність відновлюватися та адаптуватися після негараздів.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі реакції на труднощі, невдачі, стрес та процесу відновлення після них.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ СТІЙКОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ВІДНОВЛЕННЯ:
+- Слова відновлення: «відновився», «повернувся», «оговтався», «став на ноги»
+- Лексика подолання: «подолав», «пережив», «витримав», «справився», «вистояв»
+- Слова адаптації: «адаптувався», «пристосувався», «знайшов новий спосіб»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ПОЗИТИВНОГО ПЕРЕОСМИСЛЕННЯ:
+- Слова уроків: «навчився», «зрозумів», «усвідомив», «виніс урок», «цінний досвід»
+- Лексика росту: «виріс», «розвинувся», «покращив», «вдосконалився»
+- Слова можливостей у кризі: «можливість», «шанс», «поштовх», «стимул»
+
+C. МАРКЕРИ НИЗЬКОЇ СТІЙКОСТІ (негативні індикатори):
+- Слова застрягання: «досі не можу», «не відпускає», «постійно згадую»
+- Лексика жертви: «мене зламало», «знищило», «розбило», «не переживу»
+- Катастрофізація: «це катастрофа», «кінець всьому», «все пропало»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика відновлення, позитивне переосмислення, фокус на рості
+- Бал 7-8: регулярна лексика подолання та відновлення
+- Бал 4-6: змішана картина, описи і подолання, і труднощів
+- Бал 2-3: переважання лексики труднощів над подоланням
+- Бал 0-1: домінування лексики жертви, застрягання, катастрофізація
+
+Виводь лише одне число.`,
+
+            optimism: `Шкала Оптимізму (Optimism) — Psychological Capital (PsyCap).
+Оцінка повинна бути одним числом від 0 до 10.
+Оптимізм = позитивні очікування від майбутнього + реалістичний атрибутивний стиль.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі майбутнього, поясненні успіхів та невдач, ставленні до можливостей та очікуваннях.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ОПТИМІЗМУ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ПОЗИТИВНИХ ОЧІКУВАНЬ:
+- Слова позитивного майбутнього: «вийде», «буде добре», «успіх», «вдасться», «покращиться»
+- Слова можливостей: «можливість», «шанс», «перспектива», «потенціал», «відкривається»
+- Слова впевненості в майбутньому: «все буде гаразд», «впораємось», «вирішиться»
+
+B. АТРИБУТИВНИЙ СТИЛЬ:
+- При успіхах — внутрішня атрибуція: «завдяки мені», «моя заслуга», «мої зусилля»
+- При невдачах — зовнішня атрибуція: «обставини склались», «ситуація була складна»
+- При невдачах — тимчасовість: «цього разу не вийшло», «в цій ситуації»
+
+C. МАРКЕРИ ПЕСИМІЗМУ (негативні індикатори):
+- Слова негативних очікувань: «не вийде», «буде погано», «провал», «катастрофа»
+- При невдачах — внутрішня атрибуція: «я невдаха», «моя провина», «я не здатний»
+- При невдачах — стабільність: «так завжди», «постійно», «вічно»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематичні позитивні очікування, правильний атрибутивний стиль
+- Бал 7-8: регулярні позитивні очікування від майбутнього
+- Бал 4-6: змішані очікування, нестабільний атрибутивний стиль
+- Бал 2-3: переважання негативних очікувань
+- Бал 0-1: домінування негативних очікувань, повністю песимістичний стиль
+
+Виводь лише одне число.`,
+
+            agency: `Шкала Агентності (Agency) — Interpersonal Circumplex (IPC).
+Оцінка повинна бути одним числом від 0 до 10.
+Агентність = орієнтація на особисті досягнення, статус, владу та незалежність.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі досягнень, лідерства, самостійності, амбіцій та прийняття рішень.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ АГЕНТНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ДОСЯГНЕНЬ:
+- Слова досягнення: «досяг», «здобув», «завоював», «виграв», «перемога», «успіх»
+- Лексика амбіцій: «мета», «амбіція», «прагну більшого», «хочу досягти», «мрію про»
+- Слова зростання: «просунувся», «виріс», «покращив позиції», «підвищення»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ЛІДЕРСТВА:
+- Слова лідерства: «очолив», «повів», «керував», «організував», «управляв»
+- Слова прийняття рішень: «вирішив», «прийняв рішення», «визначив», «постановив»
+
+C. МАРКЕРИ НИЗЬКОЇ АГЕНТНОСТІ (негативні індикатори):
+- Слова підпорядкування: «мені сказали», «мене попросили», «доручили», «виконував вказівки»
+- Лексика залежності: «допомогли», «завдяки іншим», «без підтримки не зміг би»
+- Слова уникання рішень: «не від мене залежало», «вирішували інші»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика досягнень, активне лідерство, самостійність
+- Бал 7-8: регулярна лексика досягнень та успіху, описи лідерських ситуацій
+- Бал 4-6: змішана картина, присутні і досягнення, і командна робота
+- Бал 2-3: переважання колективної лексики, мало особистих досягнень
+- Бал 0-1: домінування підпорядкування, повна залежність
+
+Виводь лише одне число.`,
+
+            communion: `Шкала Комунальності (Communion) — Interpersonal Circumplex (IPC).
+Оцінка повинна бути одним числом від 0 до 10.
+Комунальність = орієнтація на стосунки, близькість, турботу про інших та приналежність до групи.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі стосунків з людьми, турботи про інших, співпраці та емоційних зв'язків.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ КОМУНАЛЬНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ТУРБОТИ:
+- Слова турботи: «турбуюсь», «піклуюсь», «хвилююсь за», «переживаю за», «дбаю про»
+- Лексика допомоги: «допоміг», «підтримав», «виручив», «підставив плече», «був поруч»
+- Слова емпатії: «розумію його», «відчуваю», «співчуваю», «уявляю як йому»
+
+B. ЛЕКСИЧНІ МАРКЕРИ СТОСУНКІВ:
+- Слова близькості: «близькі», «друзі», «рідні», «свої», «команда як сім'я»
+- Домінування «ми» над «я»: «ми зробили», «у нас вийшло», «наша команда»
+
+C. МАРКЕРИ НИЗЬКОЇ КОМУНАЛЬНОСТІ (негативні індикатори):
+- Слова індивідуалізму: «сам по собі», «кожен за себе», «мої інтереси»
+- Лексика дистанції: «тримаю дистанцію», «не зближуюсь», «суто робочі стосунки»
+- Слова байдужості: «мені байдуже», «не моя справа», «не цікавить»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична турбота про інших, активна допомога, глибокі стосунки
+- Бал 7-8: регулярна турбота про колег, часті описи допомоги
+- Бал 4-6: змішана картина, присутні і турбота, і індивідуалізм
+- Бал 2-3: переважання індивідуальної лексики, дистанція у стосунках
+- Бал 0-1: домінування індивідуалізму, байдужість, недовіра
+
+Виводь лише одне число.`,
+
+            promotionFocus: `Шкала Фокусу Просування (Promotion Focus) — Regulatory Focus Theory.
+Оцінка повинна бути одним числом від 0 до 10.
+Фокус просування = орієнтація на досягнення, зростання, ідеали та можливості.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі цілей, мотивації, підходу до можливостей та реакції на успіхи/невдачі.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ДОСЯГНЕНЬ ТА ЗРОСТАННЯ:
+- Слова досягнення: «досягти», «здобути», «завоювати», «отримати», «виграти», «перемогти»
+- Лексика зростання: «рости», «розвиватися», «просуватися», «підвищуватися»
+- Слова максимізації: «більше», «краще», «вище», «максимум», «найбільше»
+
+B. ЛЕКСИЧНІ МАРКЕРИ МОЖЛИВОСТЕЙ:
+- Слова можливостей: «можливість», «шанс», «перспектива», «потенціал», «відкривається»
+- Слова ентузіазму: «цікаво», «захоплююсь», «з нетерпінням», «хочу спробувати»
+
+C. МАРКЕРИ ФОКУСУ ЗАПОБІГАННЯ (негативні індикатори):
+- Слова уникання: «уникнути», «запобігти», «не допустити», «застрахуватися»
+- Слова обов'язку: «повинен», «зобов'язаний», «мушу», «треба», «необхідно»
+- Лексика безпеки: «безпечно», «надійно», «стабільно», «без ризику»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика досягнень, фокус на можливостях, лексика зростання
+- Бал 7-8: регулярна лексика досягнень та успіху, активний пошук можливостей
+- Бал 4-6: змішана картина, присутні і досягнення, і збереження
+- Бал 2-3: переважання лексики збереження, фокус на обов'язках
+- Бал 0-1: домінування лексики уникання, фокус на втратах
+
+Виводь лише одне число.`,
+
+            preventionFocus: `Шкала Фокусу Запобігання (Prevention Focus) — Regulatory Focus Theory.
+Оцінка повинна бути одним числом від 0 до 10.
+Фокус запобігання = орієнтація на безпеку, обов'язки, уникання втрат та відповідальність.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі цілей, мотивації, підходу до ризиків та реакції на загрози/можливі втрати.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ УНИКАННЯ ТА БЕЗПЕКИ:
+- Слова уникання: «уникнути», «запобігти», «не допустити», «застрахуватися», «убезпечити»
+- Лексика безпеки: «безпечно», «надійно», «стабільно», «захищено», «гарантовано»
+- Слова обережності: «обережно», «уважно», «ретельно», «перевірити», «переконатися»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ОБОВ'ЯЗКІВ:
+- Слова обов'язку: «повинен», «зобов'язаний», «мушу», «треба», «необхідно», «маю»
+- Лексика відповідальності: «відповідальність», «обов'язок», «зобов'язання»
+- Слова норм: «як належить», «за правилами», «як очікується», «відповідно до»
+
+C. МАРКЕРИ ФОКУСУ ПРОСУВАННЯ (негативні індикатори):
+- Слова досягнення: «досягти», «здобути», «виграти», «перемогти»
+- Лексика зростання: «рости», «розвиватися», «покращуватися»
+- Слова можливостей: «можливість», «шанс», «потенціал»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика уникання, фокус на безпеці, обов'язки та норми
+- Бал 7-8: регулярна лексика уникання та безпеки, обережний підхід
+- Бал 4-6: змішана картина, присутні і уникання, і досягнення
+- Бал 2-3: переважання лексики досягнень, фокус на можливостях
+- Бал 0-1: домінування лексики досягнень, відсутність слів обережності
+
+Виводь лише одне число.`,
+
+            autonomy: `Шкала Автономії (Autonomy) — Self-Determination Theory (SDT).
+Оцінка повинна бути одним числом від 0 до 10.
+Автономія = відчуття волі, власного вибору та самовизначення у діях.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі прийняття рішень, вибору, самовизначення та внутрішньої мотивації.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ АВТОНОМІЇ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ВИБОРУ ТА СВОБОДИ:
+- Слова вибору: «обрав», «вирішив», «вибрав», «обираю», «мій вибір»
+- Лексика свободи: «свобода», «можливість вибору», «варіанти», «альтернативи»
+- Слова волі: «хочу», «бажаю», «вирішую сам», «на власний розсуд»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ВНУТРІШНЬОЇ МОТИВАЦІЇ:
+- Слова інтересу: «цікаво», «захоплює», «подобається», «приваблює»
+- Лексика задоволення від процесу: «насолоджуюсь», «радію», «приносить задоволення»
+- Слова особистого сенсу: «має сенс для мене», «важливо мені», «відповідає цінностям»
+
+C. МАРКЕРИ НИЗЬКОЇ АВТОНОМІЇ (негативні індикатори):
+- Слова підпорядкування: «мені сказали», «мене попросили», «доручили»
+- Лексика зовнішнього тиску: «змусили», «довелося», «не було вибору», «вимагали»
+- Лексика обов'язку без бажання: «повинен», «мушу», «треба» (без «хочу»)
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика вибору, внутрішня мотивація, самостійність
+- Бал 7-8: регулярна лексика вибору та свободи, присутність внутрішньої мотивації
+- Бал 4-6: змішана картина, присутні і вибір, і обов'язки
+- Бал 2-3: переважання лексики обов'язку, мало слів про власний вибір
+- Бал 0-1: домінування підпорядкування, відсутність слів вибору
+
+Виводь лише одне число.`,
+
+            competence: `Шкала Компетентності (Competence) — Self-Determination Theory (SDT).
+Оцінка повинна бути одним числом від 0 до 10.
+Компетентність = відчуття майстерності, здатності справлятися та ефективності у діяльності.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі своїх вмінь, здатності справлятися з завданнями, майстерності та відчуття ефективності.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ КОМПЕТЕНТНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ МАЙСТЕРНОСТІ:
+- Слова вміння: «вмію», «можу», «здатний», «опанував», «освоїв»
+- Лексика майстерності: «майстер», «експерт», «професіонал», «фахівець»
+- Слова досвіду: «досвід», «практика», «роки роботи», «напрацював»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ЕФЕКТИВНОСТІ:
+- Слова результату: «досяг», «зробив», «виконав», «реалізував», «завершив»
+- Лексика успіху: «успішно», «вдало», «ефективно», «якісно», «добре вийшло»
+- Слова зростання: «навчився», «освоїв», «опанував», «вивчив», «розібрався»
+
+C. МАРКЕРИ НИЗЬКОЇ КОМПЕТЕНТНОСТІ (негативні індикатори):
+- Слова сумніву у здатностях: «не впевнений чи зможу», «не знаю чи вийде»
+- Лексика некомпетентності: «не вмію», «не можу», «не здатний», «не знаю»
+- Слова провалу: «не вийшло», «провалив», «не справився», «не зміг»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична лексика майстерності, успішне виконання, впевненість
+- Бал 7-8: регулярна лексика вміння та майстерності, описи успішних виконань
+- Бал 4-6: змішана картина, і успіхи, і невдачі
+- Бал 2-3: переважання сумнівів, мало слів про вміння та майстерність
+- Бал 0-1: домінування некомпетентності, часті провали
+
+Виводь лише одне число.`,
+
+            relatedness: `Шкала Зв'язаності (Relatedness) — Self-Determination Theory (SDT).
+Оцінка повинна бути одним числом від 0 до 10.
+Зв'язаність = відчуття приналежності, взаємозв'язку з іншими та соціальної включеності.
+Оцінюй виключно на основі присутності конкретних психолінгвістичних маркерів у мовленні кандидата при описі стосунків з колегами, відчуття приналежності, взаємозв'язку та соціальної включеності на роботі.
+
+КАТЕГОРІЇ ПСИХОЛІНГВІСТИЧНИХ МАРКЕРІВ ЗВ'ЯЗАНОСТІ:
+
+A. ЛЕКСИЧНІ МАРКЕРИ ПРИНАЛЕЖНОСТІ:
+- Слова приналежності: «належу», «частина», «член», «наша команда», «свої»
+- Лексика включеності: «включений», «залучений», «разом», «спільно»
+- Слова «ми»: «ми», «наш», «нам», «у нас», «наше»
+
+B. ЛЕКСИЧНІ МАРКЕРИ ВЗАЄМОЗВ'ЯЗКУ:
+- Слова зв'язку: «зв'язок», «контакт», «стосунки», «взаємодія»
+- Лексика близькості: «близькі», «друзі», «товариші», «рідні люди»
+- Слова довіри: «довіряю», «відкритий», «чесний», «можу покластися»
+
+C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні індикатори):
+- Слова ізоляції: «сам», «один», «ізольований», «відокремлений», «самотній»
+- Лексика дистанції: «тримаю дистанцію», «не зближуюсь», «формальні стосунки»
+- Слова виключення: «не приймають», «відторгають», «чужий», «не свій»
+
+ШКАЛА ОЦІНЮВАННЯ:
+- Бал 9-10: систематична приналежність, глибокі зв'язки, соціальна підтримка
+- Бал 7-8: регулярна лексика приналежності та «ми», позитивні стосунки
+- Бал 4-6: змішана картина, і командна робота, і індивідуальна
+- Бал 2-3: переважання «я» над «ми», дистанція в стосунках
+- Бал 0-1: домінування ізоляції, відсутність приналежності
+
+Виводь лише одне число.`
+        };
+
+        // Note: scales and analysisHistory are now loaded from server in initApp()
+
+        // Check API key status
+        function checkApiKey() {
+            const apiKey = document.getElementById('apiKey').value;
+            const dot = document.getElementById('apiStatusDot');
+            const text = document.getElementById('apiStatusText');
+            const warning = document.getElementById('apiWarning');
+            const btn = document.getElementById('startAnalysisBtn');
+
+            if (apiKey && apiKey.startsWith('sk-or-')) {
+                dot.classList.add('connected');
+                text.textContent = 'API підключено';
+                warning.style.display = 'none';
+                btn.disabled = false;
+                localStorage.setItem('liti_apiKey', apiKey);
+            } else {
+                dot.classList.remove('connected');
+                text.textContent = 'API не налаштовано';
+                warning.style.display = 'flex';
+                btn.disabled = true;
+            }
+        }
+
+        // System prompt change handler
+        function onSystemPromptChange() {
+            const current = document.getElementById('systemPrompt').value;
+            const saveBtn = document.getElementById('savePromptBtn');
+
+            if (current !== originalSystemPrompt) {
+                saveBtn.style.display = 'inline-flex';
+            } else {
+                saveBtn.style.display = 'none';
+            }
+        }
+
+        // Save system prompt to server
+        async function saveSystemPrompt() {
+            const prompt = document.getElementById('systemPrompt').value;
+            const success = await savePromptsToServer();
+            if (success) {
+                originalSystemPrompt = prompt;
+                document.getElementById('savePromptBtn').style.display = 'none';
+                showToast('Системний промпт збережено на сервер');
+            } else {
+                showToast('Помилка збереження');
+            }
+        }
+
+        // Requirements prompt change handler
+        function onRequirementsPromptChange() {
+            const current = document.getElementById('requirementsPrompt').value;
+            const saveBtn = document.getElementById('saveRequirementsPromptBtn');
+
+            if (current !== originalRequirementsPrompt) {
+                saveBtn.style.display = 'inline-flex';
+            } else {
+                saveBtn.style.display = 'none';
+            }
+        }
+
+        // Save requirements prompt to server
+        async function saveRequirementsPrompt() {
+            const prompt = document.getElementById('requirementsPrompt').value;
+            const success = await savePromptsToServer();
+            if (success) {
+                originalRequirementsPrompt = prompt;
+                document.getElementById('saveRequirementsPromptBtn').style.display = 'none';
+                showToast('Промпт для вимог збережено');
+            } else {
+                showToast('Помилка збереження');
+            }
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+            item.addEventListener('click', () => {
+                const page = item.dataset.page;
+                showPage(page);
+            });
+        });
+
+        function showPage(page) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+            const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+            if (navItem) navItem.classList.add('active');
+
+            document.getElementById(`page-${page}`).classList.add('active');
+        }
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                document.getElementById('tab-upload').style.display = tabName === 'upload' ? 'block' : 'none';
+                document.getElementById('tab-paste').style.display = tabName === 'paste' ? 'block' : 'none';
+            });
+        });
+
+        // File Upload
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+
+        function handleFile(file) {
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileInfo').style.display = 'block';
+
+                // Read file content
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedFileContent = e.target.result;
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function clearFile() {
+            fileInput.value = '';
+            document.getElementById('fileInfo').style.display = 'none';
+            uploadedFileContent = '';
+        }
+
+        // Save model selection
+        document.getElementById('aiModel').addEventListener('change', () => {
+            localStorage.setItem('liti_model', document.getElementById('aiModel').value);
+        });
+
+        // Render Scale List
+        function renderScales() {
+            const list = document.getElementById('scaleList');
+            list.innerHTML = scales.map(scale => `
+                <div class="scale-item">
+                    <div class="scale-toggle ${scale.enabled ? 'active' : ''}" onclick="toggleScale(${scale.id})"></div>
+                    <div class="scale-info">
+                        <div class="scale-name">${scale.name}</div>
+                        <div class="scale-category">${scale.category}</div>
+                    </div>
+                    <div class="scale-actions">
+                        <button class="btn btn-icon btn-secondary" onclick="editScale(${scale.id})" title="Редагувати">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-icon" style="background: rgba(248, 113, 113, 0.15); color: var(--danger);" onclick="event.stopPropagation(); deleteScale(${scale.id})" title="Видалити">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function toggleScale(id) {
+            const scale = scales.find(s => s.id === id);
+            if (scale) {
+                scale.enabled = !scale.enabled;
+                renderScales();
+                await saveScales();
+            }
+        }
+
+        async function toggleAllScales(enabled) {
+            scales.forEach(scale => scale.enabled = enabled);
+            renderScales();
+            await saveScales();
+            showToast(enabled ? 'Всі шкали увімкнено' : 'Всі шкали вимкнено');
+        }
+
+        async function deleteScale(id) {
+            if (!confirm('Ви впевнені, що хочете видалити цю шкалу?')) return;
+            scales = scales.filter(s => s.id !== id);
+            renderScales();
+            await saveScales();
+            showToast('Шкалу видалено');
+        }
+
+        async function saveScales() {
+            await savePromptsToServer();
+        }
+
+        // Render History
+        function renderHistory() {
+            const grid = document.getElementById('historyGrid');
+
+            if (analysisHistory.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <div class="empty-title">Немає аналізів</div>
+                        <div class="empty-text">Створіть перший аналіз, щоб побачити результати тут</div>
+                        <button class="btn btn-primary" onclick="showPage('analysis')">Новий аналіз</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = analysisHistory.map(analysis => `
+                <div class="analysis-card" style="position: relative;">
+                    <button class="btn btn-icon" style="position: absolute; top: 12px; right: 12px; background: rgba(248, 113, 113, 0.15); color: var(--danger); z-index: 10;" onclick="event.stopPropagation(); deleteAnalysis(${analysis.id})" title="Видалити аналіз">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                        </svg>
+                    </button>
+                    <div onclick="showResults(${analysis.id})" style="cursor: pointer;">
+                        <div class="analysis-header">
+                            <div>
+                                <div class="analysis-title">${analysis.candidateName}</div>
+                                <div class="analysis-date">${analysis.date}</div>
+                            </div>
+                            <span class="analysis-status ${analysis.status}" style="margin-right: 30px;">${analysis.status === 'completed' ? 'Завершено' : 'Обробка...'}</span>
+                        </div>
+                        <div class="analysis-preview">
+                            <span class="preview-badge ${getScoreClass(analysis.scores.conscientiousness)}">Сумлінність: ${analysis.scores.conscientiousness}</span>
+                            <span class="preview-badge ${getScoreClass(analysis.scores.extraversion)}">Екстраверсія: ${analysis.scores.extraversion}</span>
+                            <span class="preview-badge ${getScoreClass(10 - analysis.scores.narcissism)}">Нарцисизм: ${analysis.scores.narcissism}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteAnalysis(id) {
+            if (!confirm('Ви впевнені, що хочете видалити цей аналіз?')) return;
+            analysisHistory = analysisHistory.filter(a => a.id !== id);
+            await deleteAnalysisFromServer(id);
+            renderHistory();
+            showToast('Аналіз видалено');
+        }
+
+        async function deleteAnalysisFromServer(id) {
+            try {
+                await fetch(`/api/history/${id}`, { method: 'DELETE' });
+            } catch (error) {
+                console.error('Error deleting analysis:', error);
+            }
+        }
+
+        async function deleteAllAnalyses() {
+            if (!confirm('Ви впевнені, що хочете видалити ВСІ аналізи? Цю дію неможливо скасувати.')) return;
+            analysisHistory = [];
+            try {
+                await fetch('/api/history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify([])
+                });
+            } catch (error) {
+                console.error('Error clearing history:', error);
+            }
+            renderHistory();
+            showToast('Всі аналізи видалено');
+        }
+
+        function getScoreClass(score) {
+            if (score >= 7) return 'high';
+            if (score >= 4) return 'medium';
+            return 'low';
+        }
+
+        // Analysis with real API
+        async function startAnalysis() {
+            const firstName = document.getElementById('candidateFirstName').value.trim();
+            const lastName = document.getElementById('candidateLastName').value.trim();
+
+            if (!firstName || !lastName) {
+                alert('Будь ласка, введіть ім\'я та прізвище кандидата');
+                return;
+            }
+
+            const textContent = uploadedFileContent || document.getElementById('textInput').value.trim();
+            if (!textContent) {
+                alert('Будь ласка, завантажте файл або вставте текст транскрипту');
+                return;
+            }
+
+            const apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                alert('Будь ласка, налаштуйте API-ключ OpenRouter');
+                showPage('settings');
+                return;
+            }
+
+            // Get vacancy and resume data
+            const vacancyEnabled = document.getElementById('vacancyEnabled').checked;
+            const resumeEnabled = document.getElementById('resumeEnabled').checked;
+            const vacancyText = vacancyEnabled ? document.getElementById('vacancyInput').value.trim() : '';
+            const resumeText = resumeEnabled ? document.getElementById('resumeInput').value.trim() : '';
+
+            const candidateName = `${firstName} ${lastName}`;
+            const overlay = document.getElementById('processingOverlay');
+            overlay.classList.add('active');
+
+            const enabledScales = scales.filter(s => s.enabled);
+            const totalSteps = enabledScales.length + (vacancyEnabled ? 1 : 0);
+            let progress = 0;
+            const results = {};
+            let requirementsMatch = null;
+
+            try {
+                // Process each scale
+                for (const scale of enabledScales) {
+                    progress++;
+                    document.getElementById('progressFill').style.width = `${(progress / totalSteps) * 100}%`;
+                    document.getElementById('progressText').textContent = `${progress}/${totalSteps}`;
+                    document.getElementById('processingStatus').textContent = `Аналіз: ${scale.name}...`;
+
+                    const score = await analyzeScale(scale, textContent, apiKey);
+                    results[scale.name.toLowerCase().replace(/[^a-zа-яіїєґ]/g, '')] = score;
+
+                    // Small delay between requests
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                // Analyze requirements matching if vacancy is provided
+                if (vacancyEnabled && vacancyText) {
+                    progress++;
+                    document.getElementById('progressFill').style.width = `${(progress / totalSteps) * 100}%`;
+                    document.getElementById('processingStatus').textContent = `Аналіз відповідності вимогам...`;
+
+                    requirementsMatch = await analyzeRequirements(vacancyText, resumeText, textContent, apiKey);
+                }
+
+                // Create new analysis entry - only save analyzed scales
+                const analyzedScores = {};
+                const analyzedScaleNames = [];
+                for (const scale of enabledScales) {
+                    const key = scale.name.toLowerCase().replace(/[^a-zа-яіїєґ]/g, '');
+                    if (results[key] !== undefined) {
+                        analyzedScores[key] = results[key];
+                        analyzedScaleNames.push(scale.name);
+                    }
+                }
+
+                const newAnalysis = {
+                    id: Date.now(),
+                    candidateName: candidateName,
+                    date: new Date().toLocaleString('uk-UA'),
+                    status: 'completed',
+                    scores: analyzedScores,
+                    analyzedScales: analyzedScaleNames,
+                    requirementsMatch: requirementsMatch
+                };
+
+                analysisHistory.unshift(newAnalysis);
+                await addAnalysisToServer(newAnalysis);
+                renderHistory();
+
+                overlay.classList.remove('active');
+                showResults(newAnalysis.id);
+                showToast('Аналіз завершено успішно');
+
+                // Clear form
+                document.getElementById('candidateFirstName').value = '';
+                document.getElementById('candidateLastName').value = '';
+                document.getElementById('textInput').value = '';
+                document.getElementById('vacancyInput').value = '';
+                document.getElementById('resumeInput').value = '';
+                document.getElementById('vacancyEnabled').checked = false;
+                document.getElementById('resumeEnabled').checked = false;
+                clearFile();
+
+            } catch (error) {
+                overlay.classList.remove('active');
+                alert('Помилка при аналізі: ' + error.message);
+            }
+        }
+
+        // Analyze requirements matching
+        async function analyzeRequirements(vacancyText, resumeText, interviewText, apiKey) {
+            const model = document.getElementById('aiModel').value;
+            const requirementsPrompt = document.getElementById('requirementsPrompt').value;
+
+            let userContent = `Вакансія:\n${vacancyText}\n\n`;
+            if (resumeText) {
+                userContent += `Резюме кандидата:\n${resumeText}\n\n`;
+            } else {
+                userContent += `Резюме кандидата: НЕ НАДАНО\n\n`;
+            }
+            userContent += `Транскрипт інтерв'ю:\n${interviewText.substring(0, 6000)}`;
+
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'LITI - Psycholinguistic HR Analysis',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: 'system', content: requirementsPrompt },
+                            { role: 'user', content: userContent }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.3
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || '[]';
+
+                // Try to parse JSON from response
+                try {
+                    const jsonMatch = content.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) {
+                        return JSON.parse(jsonMatch[0]);
+                    }
+                    return [];
+                } catch (e) {
+                    console.error('Failed to parse requirements JSON:', e);
+                    return [];
+                }
+
+            } catch (error) {
+                console.error('Error analyzing requirements:', error);
+                return [];
+            }
+        }
+
+        async function analyzeScale(scale, text, apiKey) {
+            const model = document.getElementById('aiModel').value;
+            const systemPrompt = document.getElementById('systemPrompt').value;
+
+            const scalePrompt = scale.instructions || `Оціни рівень "${scale.name}" кандидата на основі транскрипту. Виводь лише одне число від 0 до 10.`;
+
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'LITI - Psycholinguistic HR Analysis',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: `${scalePrompt}\n\nТранскрипт:\n${text.substring(0, 8000)}` }
+                        ],
+                        max_tokens: 10,
+                        temperature: 0.1
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const content = data.choices[0]?.message?.content || '5';
+                const score = parseInt(content.match(/\d+/)?.[0] || '5');
+                return Math.min(10, Math.max(0, score));
+
+            } catch (error) {
+                console.error(`Error analyzing ${scale.name}:`, error);
+                alert(`Помилка API для ${scale.name}: ${error.message}`);
+                throw error;
+            }
+        }
+
+        // Results
+        function showResults(id) {
+            const analysis = analysisHistory.find(a => a.id === id);
+            if (!analysis) return;
+
+            document.getElementById('resultsTitle').textContent = analysis.candidateName;
+            document.getElementById('resultsSubtitle').textContent = `Аналіз від ${analysis.date}`;
+
+            const scores = analysis.scores;
+            const analyzedScales = analysis.analyzedScales || [];
+            const scaleCount = analyzedScales.length || Object.keys(scores).length;
+
+            // Scale category mapping
+            const scaleCategories = {
+                'Сумлінність': 'Big Five', 'Екстраверсія': 'Big Five', 'Приязність': 'Big Five',
+                'Нейротизм': 'Big Five', 'Відкритість': 'Big Five', 'Чесність-Смиренність': 'HEXACO',
+                'Нарцисизм': 'Dark Triad', 'Макіавеллізм': 'Dark Triad', 'Психопатія': 'Dark Triad',
+                'Надія': 'PsyCap', 'Самоефективність': 'PsyCap', 'Стійкість': 'PsyCap', 'Оптимізм': 'PsyCap',
+                'Агентність': 'IPC', 'Комунальність': 'IPC',
+                'Фокус просування': 'Regulatory Focus', 'Фокус запобігання': 'Regulatory Focus',
+                'Автономія': 'SDT', 'Компетентність': 'SDT', "Зв'язаність": 'SDT'
+            };
+
+            const invertedScales = ['Нейротизм', 'Нарцисизм', 'Макіавеллізм', 'Психопатія'];
+
+            // Build scores array only from analyzed scales
+            const analyzedScoresList = [];
+            for (const scaleName of analyzedScales) {
+                const key = scaleName.toLowerCase().replace(/[^a-zа-яіїєґ]/g, '');
+                if (scores[key] !== undefined) {
+                    analyzedScoresList.push({
+                        name: scaleName,
+                        value: scores[key],
+                        category: scaleCategories[scaleName] || 'Інші',
+                        inverted: invertedScales.includes(scaleName)
+                    });
+                }
+            }
+
+            // Calculate averages only from analyzed scales
+            const allValues = analyzedScoresList.map(s => s.value);
+            const avgAll = allValues.length > 0 ? Math.round(allValues.reduce((a, b) => a + b, 0) / allValues.length * 10) / 10 : 0;
+
+            const darkScales = analyzedScoresList.filter(s => s.category === 'Dark Triad');
+            const avgDark = darkScales.length > 0 ? Math.round(darkScales.reduce((a, s) => a + s.value, 0) / darkScales.length * 10) / 10 : null;
+            const riskLevel = avgDark !== null ? (avgDark > 5 ? 'Високий' : avgDark > 3 ? 'Середній' : 'Низький') : 'Н/Д';
+
+            // Requirements match percentage
+            let reqMatchHtml = '';
+            if (analysis.requirementsMatch && analysis.requirementsMatch.length > 0) {
+                const totalReqs = analysis.requirementsMatch.length;
+                const metReqs = analysis.requirementsMatch.filter(r => r.resumeMatch === 'yes' || r.interviewMatch === 'yes').length;
+                const matchPercent = Math.round(metReqs / totalReqs * 100);
+                const matchClass = matchPercent >= 70 ? 'positive' : matchPercent >= 40 ? 'neutral' : 'negative';
+                reqMatchHtml = `
+                    <div class="summary-card">
+                        <div class="summary-label">Відповідність вимогам</div>
+                        <div class="summary-value ${matchClass}">${matchPercent}%</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('resultsSummary').innerHTML = `
+                <div class="summary-card">
+                    <div class="summary-label">Загальний профіль</div>
+                    <div class="summary-value positive">${avgAll}/10</div>
+                </div>
+                ${avgDark !== null ? `
+                <div class="summary-card">
+                    <div class="summary-label">Dark Triad</div>
+                    <div class="summary-value ${avgDark > 5 ? 'negative' : avgDark > 3 ? 'neutral' : 'positive'}">${avgDark}/10</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Рівень ризику</div>
+                    <div class="summary-value ${avgDark > 5 ? 'negative' : avgDark > 3 ? 'neutral' : 'positive'}">${riskLevel}</div>
+                </div>
+                ` : ''}
+                ${reqMatchHtml}
+                <div class="summary-card">
+                    <div class="summary-label">Оброблено шкал</div>
+                    <div class="summary-value">${scaleCount}</div>
+                </div>
+            `;
+
+            // Group by category
+            const categories = [...new Set(analyzedScoresList.map(s => s.category))];
+
+            document.getElementById('resultsContent').innerHTML = categories.map(cat => {
+                const catScores = analyzedScoresList.filter(s => s.category === cat);
+                return `
+                    <div class="category-section">
+                        <h3 class="category-title">${cat} <span class="category-badge">${catScores.length} шкал</span></h3>
+                        <div class="score-grid">
+                            ${catScores.map(s => {
+                                const displayScore = s.value;
+                                const scoreClass = s.inverted ?
+                                    (displayScore <= 3 ? 'high' : displayScore <= 6 ? 'medium' : 'low') :
+                                    (displayScore >= 7 ? 'high' : displayScore >= 4 ? 'medium' : 'low');
+                                return `
+                                    <div class="score-card">
+                                        <div class="score-header">
+                                            <span class="score-name">${s.name}</span>
+                                            <span class="score-value" style="color: var(--${scoreClass === 'high' ? 'success' : scoreClass === 'medium' ? 'warning' : 'danger'})">${displayScore}/10</span>
+                                        </div>
+                                        <div class="score-bar">
+                                            <div class="score-fill ${scoreClass}" style="width: ${displayScore * 10}%"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add requirements matching table if available
+            if (analysis.requirementsMatch && analysis.requirementsMatch.length > 0) {
+                const matchIcon = (status) => {
+                    if (status === 'yes') return '<span class="match-icon match-yes">&#10003;</span>';
+                    if (status === 'no') return '<span class="match-icon match-no">&#10007;</span>';
+                    return '<span class="match-icon match-unclear">?</span>';
+                };
+
+                document.getElementById('resultsContent').innerHTML += `
+                    <div class="category-section">
+                        <h3 class="category-title">Відповідність вимогам вакансії <span class="category-badge">${analysis.requirementsMatch.length} вимог</span></h3>
+                        <div class="card" style="margin-top: 16px; padding: 0; overflow: hidden;">
+                            <table class="requirements-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40%;">Вимога</th>
+                                        <th style="width: 15%; text-align: center;">Резюме</th>
+                                        <th style="width: 15%; text-align: center;">Інтерв'ю</th>
+                                        <th style="width: 30%;">Коментар</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${analysis.requirementsMatch.map(req => `
+                                        <tr>
+                                            <td>${req.requirement}</td>
+                                            <td style="text-align: center;">${matchIcon(req.resumeMatch)}</td>
+                                            <td style="text-align: center;">${matchIcon(req.interviewMatch)}</td>
+                                            <td style="color: var(--text-secondary); font-size: 13px;">${req.comment || ''}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+
+            showPage('results');
+        }
+
+        // PDF Export
+        let currentAnalysisId = null;
+
+        function exportToPDF() {
+            const title = document.getElementById('resultsTitle').textContent;
+            const subtitle = document.getElementById('resultsSubtitle').textContent;
+            const summaryHTML = document.getElementById('resultsSummary').innerHTML;
+            const contentHTML = document.getElementById('resultsContent').innerHTML;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>LITI - ${title}</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            padding: 40px;
+                            color: #1a1a2e;
+                            background: white;
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 40px;
+                            padding-bottom: 20px;
+                            border-bottom: 3px solid #9d4edd;
+                        }
+                        .logo-text {
+                            font-size: 36px;
+                            font-weight: 800;
+                            color: #9d4edd;
+                            letter-spacing: 4px;
+                            margin-bottom: 10px;
+                        }
+                        .title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+                        .subtitle { color: #666; font-size: 14px; }
+                        .summary-grid {
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 16px;
+                            margin-bottom: 40px;
+                        }
+                        .summary-card {
+                            background: #f8f8fc;
+                            padding: 20px;
+                            border-radius: 12px;
+                            text-align: center;
+                            border: 1px solid #e0e0e0;
+                        }
+                        .summary-label { font-size: 12px; color: #666; margin-bottom: 8px; }
+                        .summary-value { font-size: 24px; font-weight: 700; }
+                        .summary-value.positive { color: #22c55e; }
+                        .summary-value.neutral { color: #f59e0b; }
+                        .summary-value.negative { color: #ef4444; }
+                        .category-section { margin-bottom: 32px; }
+                        .category-title {
+                            font-size: 18px;
+                            font-weight: 600;
+                            margin-bottom: 16px;
+                            color: #9d4edd;
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                        }
+                        .category-badge {
+                            background: #f0e6ff;
+                            color: #7b2cbf;
+                            padding: 4px 10px;
+                            border-radius: 6px;
+                            font-size: 12px;
+                            font-weight: 400;
+                        }
+                        .score-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 12px;
+                        }
+                        .score-card {
+                            background: #fafafa;
+                            padding: 16px;
+                            border-radius: 10px;
+                            border: 1px solid #eee;
+                        }
+                        .score-header {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 10px;
+                        }
+                        .score-name { font-weight: 500; font-size: 13px; }
+                        .score-value { font-weight: 700; font-size: 16px; }
+                        .score-bar {
+                            height: 8px;
+                            background: #e5e5e5;
+                            border-radius: 4px;
+                            overflow: hidden;
+                        }
+                        .score-fill { height: 100%; border-radius: 4px; }
+                        .score-fill.high { background: #22c55e; }
+                        .score-fill.medium { background: #f59e0b; }
+                        .score-fill.low { background: #ef4444; }
+                        .footer {
+                            margin-top: 40px;
+                            padding-top: 20px;
+                            border-top: 1px solid #e0e0e0;
+                            text-align: center;
+                            color: #999;
+                            font-size: 12px;
+                        }
+                        @media print {
+                            body { padding: 20px; }
+                            .summary-grid { grid-template-columns: repeat(4, 1fr); }
+                            .score-grid { grid-template-columns: repeat(3, 1fr); }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="logo-text">LITI</div>
+                        <h1 class="title">${title}</h1>
+                        <p class="subtitle">${subtitle}</p>
+                    </div>
+                    <div class="summary-grid">${summaryHTML}</div>
+                    <div>${contentHTML}</div>
+                    <div class="footer">
+                        <p>LITI - Psycholinguistic HR Analysis Tool by FRACTAL</p>
+                        <p>https://fractal.partners</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+        }
+
+        // Scale Modal
+        let editingScaleId = null;
+
+        function openAddScaleModal() {
+            editingScaleId = null;
+            document.getElementById('scaleModalTitle').textContent = 'Додати шкалу';
+            document.getElementById('scaleName').value = '';
+            document.getElementById('scaleCategory').value = '';
+            document.getElementById('scaleInstructions').value = '';
+            document.getElementById('scaleModal').classList.add('active');
+        }
+
+        function editScale(id) {
+            const scale = scales.find(s => s.id === id);
+            if (!scale) return;
+
+            editingScaleId = id;
+            document.getElementById('scaleModalTitle').textContent = 'Редагувати шкалу';
+            document.getElementById('scaleName').value = scale.name;
+            document.getElementById('scaleCategory').value = scale.category;
+            document.getElementById('scaleInstructions').value = scale.instructions || '';
+            document.getElementById('scaleModal').classList.add('active');
+        }
+
+        function closeScaleModal() {
+            document.getElementById('scaleModal').classList.remove('active');
+        }
+
+        async function saveScale() {
+            const name = document.getElementById('scaleName').value.trim();
+            const category = document.getElementById('scaleCategory').value.trim();
+            const instructions = document.getElementById('scaleInstructions').value;
+
+            if (!name || !category) {
+                alert('Введіть назву шкали та методику');
+                return;
+            }
+
+            if (editingScaleId) {
+                const scale = scales.find(s => s.id === editingScaleId);
+                if (scale) {
+                    scale.name = name;
+                    scale.category = category;
+                    scale.instructions = instructions;
+                }
+            } else {
+                scales.push({
+                    id: scales.length + 1,
+                    name,
+                    category,
+                    instructions,
+                    enabled: true
+                });
+            }
+
+            renderScales();
+            await saveScales();
+            closeScaleModal();
+            showToast('Шкалу збережено на сервер');
+        }
+
+        // Fullscreen textarea
+        function expandTextarea() {
+            const text = document.getElementById('scaleInstructions').value;
+            document.getElementById('fullscreenTextarea').value = text;
+            document.getElementById('fullscreenModal').classList.add('active');
+        }
+
+        function closeFullscreenModal() {
+            document.getElementById('fullscreenModal').classList.remove('active');
+        }
+
+        function applyFullscreenText() {
+            const text = document.getElementById('fullscreenTextarea').value;
+            document.getElementById('scaleInstructions').value = text;
+            closeFullscreenModal();
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.add('active');
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Initialize app - load from server
+        initApp();
+    </script>
+</body>
+</html>
