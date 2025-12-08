@@ -197,7 +197,7 @@ MIT License — використовуйте вільно для комерці�
 
 ## Автор
 
-Створено [FRACTAL](https://fractal.ua) — Psycholinguistic HR Analysis Tools
+Створено [FRACTAL](https://fractal.partners) — Psycholinguistic HR Analysis Tools
 
 ---
 
