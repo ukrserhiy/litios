@@ -31,6 +31,8 @@ build/
 
 # Data files (user-specific)
 data/history.json
+data/*.db
+data/liti.db
 
 # Temporary and test files
 *.csv

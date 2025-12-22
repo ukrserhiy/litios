@@ -41,5 +41,7 @@ prompts/
 # Claude Code
 .claude/
 
-# History (will be created at runtime)
+# History and database (will be created at runtime)
 data/history.json
+data/*.db
+data/liti.db
