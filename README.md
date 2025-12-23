@@ -232,4 +232,7 @@ LITI використовує OpenRouter для доступу до AI моде�
 
 ---
 
-**Питання?** Створіть [Issue](https://github.com/ukrserhiy/litios/issues) або зв'яжіться з [FRACTAL](https://fractal.partners).
+**Питання?** 
+Ось ШІ бот по LITI: https://gemini.google.com/gem/e21e0ab8382a
+Тут телеграм канал по LITI: https://t.me/liti_ai
+Створіть [Issue](https://github.com/ukrserhiy/litios/issues) або зв'яжіться з [FRACTAL](https://fractal.partners).
