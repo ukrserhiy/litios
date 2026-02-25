@@ -149,7 +149,7 @@ def get_settings():
     settings = {row['key']: row['value'] for row in cursor.fetchall()}
     return jsonify(settings)
 
-ALLOWED_SETTINGS_KEYS = {'apiKey', 'model', 'systemPrompt', 'personalityPrompt', 'requirementsPrompt'}
+ALLOWED_SETTINGS_KEYS = {'apiKey', 'model', 'selectedModel', 'systemPrompt', 'personalityPrompt', 'requirementsPrompt'}
 
 @app.route('/api/settings', methods=['POST'])
 def save_settings():
@@ -410,7 +410,9 @@ def delete_history_item(analysis_id):
 
 @app.route('/api/reset-to-defaults', methods=['POST'])
 def reset_to_defaults():
-    """Reset all data to defaults"""
+    """Reset all data to defaults (requires X-Confirm header)"""
+    if request.headers.get('X-Confirm') != 'true':
+        return jsonify({"error": "Missing confirmation header"}), 400
     db = get_db()
     db.execute('DELETE FROM settings')
     db.execute('DELETE FROM scales')

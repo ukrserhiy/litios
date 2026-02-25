@@ -3435,7 +3435,10 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
 
             try {
                 // Call server reset endpoint
-                const resetRes = await fetch('/api/reset-to-defaults', { method: 'POST' });
+                const resetRes = await fetch('/api/reset-to-defaults', {
+                    method: 'POST',
+                    headers: { 'X-Confirm': 'true' }
+                });
                 if (!resetRes.ok) {
                     throw new Error('Server reset failed');
                 }
