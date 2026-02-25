@@ -2289,6 +2289,12 @@ Return ONLY JSON without any additional text.</textarea>
         let originalPersonalityPrompt = '';
         let uploadedFileContent = '';
         let dataLoaded = false;
+
+        // XSS protection
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+        }
         let editingModelIndex = null;
         let analysisAbortController = null;
         let isAnalysisCancelled = false;
@@ -2380,7 +2386,7 @@ Return ONLY JSON without any additional text.</textarea>
                 const providerModels = models.filter(m => m.provider === provider);
                 return `
                     <optgroup label="${provider}">
-                        ${providerModels.map(m => `<option value="${m.id}">${m.name}</option>`).join('')}
+                        ${providerModels.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>`).join('')}
                     </optgroup>
                 `;
             }).join('');
@@ -2404,13 +2410,13 @@ Return ONLY JSON without any additional text.</textarea>
                 const providerModels = models.filter(m => m.provider === provider);
                 return `
                     <div style="margin-bottom: 16px;">
-                        <h4 style="margin-bottom: 8px; color: var(--text-secondary);">${provider}</h4>
+                        <h4 style="margin-bottom: 8px; color: var(--text-secondary);">${escapeHtml(provider)}</h4>
                         ${providerModels.map((m, idx) => {
                             const globalIdx = models.indexOf(m);
                             return `
                                 <div style="display: flex; align-items: center; padding: 8px 12px; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 4px;">
-                                    <span style="flex: 1;">${m.name}</span>
-                                    <span style="color: var(--text-muted); font-size: 12px; margin-right: 12px;">${m.id}</span>
+                                    <span style="flex: 1;">${escapeHtml(m.name)}</span>
+                                    <span style="color: var(--text-muted); font-size: 12px; margin-right: 12px;">${escapeHtml(m.id)}</span>
                                     <button type="button" class="btn btn-secondary btn-sm" onclick="editModel(${globalIdx})" style="margin-right: 4px;">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
                                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -3339,39 +3345,45 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
 
                 const data = await response.json();
 
-                // Filter models by provider (OpenAI, Anthropic, Google, xAI)
-                const targetProviders = ['openai', 'anthropic', 'google', 'x-ai'];
+                // Filter: context >= 8000, exclude vision/image-only models
                 const filteredModels = data.data.filter(model => {
                     const modelId = model.id.toLowerCase();
-                    return targetProviders.some(provider => modelId.startsWith(provider + '/')) &&
-                           model.context_length >= 8000 && // Only models with decent context
-                           !modelId.includes('vision') && // Exclude vision-only models
-                           !modelId.includes('image'); // Exclude image models
+                    return model.context_length >= 8000 &&
+                           !modelId.includes('vision') &&
+                           !modelId.includes('image');
                 });
 
-                // Map to our format
+                // Map to our format with price-based categories
                 const newModels = filteredModels.map(model => {
-                    const [provider, ...nameParts] = model.id.split('/');
-                    const providerName = {
-                        'openai': 'OpenAI',
-                        'anthropic': 'Anthropic',
-                        'google': 'Google',
-                        'x-ai': 'xAI'
-                    }[provider] || provider;
-
                     const pricePerMillion = model.pricing?.prompt ?
-                        (parseFloat(model.pricing.prompt) * 1000000).toFixed(2) : '?';
+                        parseFloat(model.pricing.prompt) * 1000000 : 0;
+                    const isFree = model.id.includes(':free') || pricePerMillion === 0;
+
+                    let provider;
+                    if (isFree) {
+                        provider = 'FREE';
+                    } else if (pricePerMillion < 0.30) {
+                        provider = 'Budget';
+                    } else if (pricePerMillion < 1.00) {
+                        provider = 'Standard';
+                    } else {
+                        provider = 'Pro';
+                    }
+
+                    const priceLabel = isFree ? 'FREE' : `$${pricePerMillion.toFixed(2)}/M`;
 
                     return {
                         id: model.id,
-                        name: `${model.name || nameParts.join('/')} ($${pricePerMillion}/M)`,
-                        provider: providerName
+                        name: `${model.name || model.id} (${priceLabel})`,
+                        provider: provider
                     };
                 });
 
-                // Sort by provider and name
+                // Sort: FREE first, then by price category, then by name
+                const providerOrder = { 'FREE': 0, 'Budget': 1, 'Standard': 2, 'Pro': 3 };
                 newModels.sort((a, b) => {
-                    if (a.provider !== b.provider) return a.provider.localeCompare(b.provider);
+                    const orderDiff = (providerOrder[a.provider] ?? 9) - (providerOrder[b.provider] ?? 9);
+                    if (orderDiff !== 0) return orderDiff;
                     return a.name.localeCompare(b.name);
                 });
 
@@ -3728,7 +3740,9 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
             { key: 'Self-Determination', url: 'https://en.wikipedia.org/wiki/Self-determination_theory' },
             { key: 'Regulatory Focus', url: 'https://en.wikipedia.org/wiki/Regulatory_focus_theory' },
             { key: 'Interpersonal Circumplex', url: 'https://en.wikipedia.org/wiki/Interpersonal_circumplex' },
-            { key: 'HEXACO', url: 'https://uk.wikipedia.org/wiki/%D0%9C%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C_%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B8_%D0%BE%D1%81%D0%BE%D0%B1%D0%B8%D1%81%D1%82%D0%BE%D1%81%D1%82%D1%96_HEXACO' }
+            { key: 'HEXACO', url: 'https://uk.wikipedia.org/wiki/%D0%9C%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C_%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B8_%D0%BE%D1%81%D0%BE%D0%B1%D0%B8%D1%81%D1%82%D0%BE%D1%81%D1%82%D1%96_HEXACO' },
+            { key: 'DISC', url: 'https://uk.wikipedia.org/wiki/DISC_(%D0%BF%D1%81%D0%B8%D1%85%D0%BE%D0%BB%D0%BE%D0%B3%D1%96%D1%8F)' },
+            { key: 'MBTI', url: 'https://uk.wikipedia.org/wiki/%D0%86%D0%BD%D0%B4%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D1%80_%D1%82%D0%B8%D0%BF%D1%96%D0%B2_%D0%9C%D0%B0%D1%94%D1%80%D1%81-%D0%91%D1%80%D1%96%D0%B3%D0%B3%D1%81' }
         ];
 
         function getCategoryWithLink(category) {
@@ -3746,7 +3760,7 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
                 <div class="scale-item">
                     <div class="scale-toggle ${scale.enabled ? 'active' : ''}" onclick="toggleScale(${scale.id})"></div>
                     <div class="scale-info">
-                        <div class="scale-name">${scale.name}</div>
+                        <div class="scale-name">${escapeHtml(scale.name)}</div>
                         <div class="scale-category">${getCategoryWithLink(scale.category)}</div>
                     </div>
                     <div class="scale-actions">
@@ -3841,8 +3855,8 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
                     <div onclick="showResults(${analysis.id})" style="cursor: pointer;">
                         <div class="analysis-header">
                             <div>
-                                <div class="analysis-title">${analysis.candidateName}</div>
-                                <div class="analysis-date">${analysis.date}</div>
+                                <div class="analysis-title">${escapeHtml(analysis.candidateName)}</div>
+                                <div class="analysis-date">${escapeHtml(analysis.date)}</div>
                             </div>
                             <span class="analysis-status ${analysis.status}" style="margin-right: 30px;">${analysis.status === 'completed' ? 'Завершено' : 'Обробка...'}</span>
                         </div>
@@ -4314,7 +4328,7 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
                 const catScores = analyzedScoresList.filter(s => s.category === cat);
                 return `
                     <div class="category-section">
-                        <h3 class="category-title">${cat} <span class="category-badge">${catScores.length} шкал</span></h3>
+                        <h3 class="category-title">${escapeHtml(cat)} <span class="category-badge">${catScores.length} шкал</span></h3>
                         <div class="score-grid">
                             ${catScores.map(s => {
                                 const displayScore = s.value;
@@ -4324,7 +4338,7 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
                                 return `
                                     <div class="score-card">
                                         <div class="score-header">
-                                            <span class="score-name">${s.name}</span>
+                                            <span class="score-name">${escapeHtml(s.name)}</span>
                                             <span class="score-value" style="color: ${scoreClass === 'high' ? '#34d399' : scoreClass === 'medium' ? '#8F2DFF' : '#a78bfa'}">${displayScore}/10</span>
                                         </div>
                                         <div class="score-bar">
@@ -4362,10 +4376,10 @@ C. МАРКЕРИ НИЗЬКОЇ ЗВ'ЯЗАНОСТІ (негативні ін�
                                 <tbody>
                                     ${analysis.requirementsMatch.map(req => `
                                         <tr>
-                                            <td>${req.requirement}</td>
+                                            <td>${escapeHtml(req.requirement)}</td>
                                             <td style="text-align: center;">${matchIcon(req.resumeMatch)}</td>
                                             <td style="text-align: center;">${matchIcon(req.interviewMatch)}</td>
-                                            <td style="color: var(--text-secondary); font-size: 13px;">${req.comment || ''}</td>
+                                            <td style="color: var(--text-secondary); font-size: 13px;">${escapeHtml(req.comment || '')}</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -4772,7 +4786,7 @@ Demo Candidate демонструє збалансований психолог�
                 <html>
                 <head>
                     <meta charset="UTF-8">
-                    <title>LITI - Опис особистості: ${candidateName}</title>
+                    <title>LITI - Опис особистості: ${escapeHtml(candidateName)}</title>
                     <style>
                         * { margin: 0; padding: 0; box-sizing: border-box; }
                         body {
@@ -4848,15 +4862,15 @@ Demo Candidate демонструє збалансований психолог�
                     <div class="info-grid">
                         <div class="info-card">
                             <div class="info-label">Кандидат</div>
-                            <div class="info-value">${candidateName}</div>
+                            <div class="info-value">${escapeHtml(candidateName)}</div>
                         </div>
                         <div class="info-card">
                             <div class="info-label">Позиція</div>
-                            <div class="info-value">${position}</div>
+                            <div class="info-value">${escapeHtml(position)}</div>
                         </div>
                         <div class="info-card">
                             <div class="info-label">Дата аналізу</div>
-                            <div class="info-value">${date}</div>
+                            <div class="info-value">${escapeHtml(date)}</div>
                         </div>
                     </div>
 

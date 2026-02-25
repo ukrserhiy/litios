@@ -127,9 +127,15 @@ def add_security_headers(response):
 def index():
     return send_file('index.html')
 
+ALLOWED_EXTENSIONS = {'.html', '.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico',
+                      '.woff', '.woff2', '.ttf', '.eot', '.webp', '.webmanifest', '.json'}
+
 @app.route('/<path:filename>')
 def serve_static(filename):
     if filename.startswith('data/') or filename == 'liti.db':
+        return jsonify({"error": "Access denied"}), 403
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
         return jsonify({"error": "Access denied"}), 403
     return send_from_directory('.', filename)
 
@@ -143,12 +149,18 @@ def get_settings():
     settings = {row['key']: row['value'] for row in cursor.fetchall()}
     return jsonify(settings)
 
+ALLOWED_SETTINGS_KEYS = {'apiKey', 'model', 'systemPrompt', 'personalityPrompt', 'requirementsPrompt'}
+
 @app.route('/api/settings', methods=['POST'])
 def save_settings():
     """Save settings"""
     data = request.get_json()
     db = get_db()
     for key, value in data.items():
+        if key not in ALLOWED_SETTINGS_KEYS:
+            continue
+        if not isinstance(value, str) or len(value) > 100000:
+            continue
         db.execute('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)', (key, value))
     db.commit()
     return jsonify({"success": True})
