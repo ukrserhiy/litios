@@ -1,93 +1,108 @@
 {
   "models": [
     {
-      "id": "meta-llama/llama-3.3-70b-instruct:free",
-      "name": "Meta: Llama 3.3 70B Instruct (FREE)",
+      "id": "openai/gpt-oss-20b:free",
+      "name": "OpenAI: GPT-OSS 20B (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "nousresearch/hermes-3-llama-3.1-405b:free",
-      "name": "Nous: Hermes 3 405B (FREE)",
+      "id": "google/gemma-4-31b-it:free",
+      "name": "Google: Gemma 4 31B (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "qwen/qwen3-coder:free",
-      "name": "Qwen3 Coder (FREE)",
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "name": "Google: Gemma 4 26B (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "mistralai/mistral-small-3.1-24b-instruct:free",
-      "name": "Mistral Small 3.1 24B (FREE)",
+      "id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "name": "NVIDIA: Nemotron 3 Super 120B (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "google/gemma-3-27b-it:free",
-      "name": "Google: Gemma 3 27B (FREE)",
+      "id": "nvidia/nemotron-3-nano-30b-a3b:free",
+      "name": "NVIDIA: Nemotron 3 Nano 30B (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "stepfun/step-3.5-flash:free",
-      "name": "StepFun: Step 3.5 Flash (FREE)",
+      "id": "inclusionai/ling-3.0-tiny:free",
+      "name": "InclusionAI: Ling 3.0 Tiny (FREE)",
       "provider": "FREE"
     },
     {
-      "id": "qwen/qwen3-next:free",
-      "name": "Qwen3 Next 80B (FREE)",
+      "id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini (FREE)",
       "provider": "FREE"
+    },
+    {
+      "id": "openai/gpt-oss-120b",
+      "name": "GPT-OSS 120B ($0.04/$0.17)",
+      "provider": "Budget"
     },
     {
       "id": "openai/gpt-5-nano",
-      "name": "GPT-5 Nano ($0.05/$0.40)",
+      "name": "GPT-5 Nano ($0.05/$0.4)",
       "provider": "Budget"
     },
     {
       "id": "google/gemini-2.5-flash-lite",
-      "name": "Gemini 2.5 Flash Lite ($0.10/$0.40)",
+      "name": "Gemini 2.5 Flash Lite ($0.1/$0.4)",
       "provider": "Budget"
     },
     {
-      "id": "x-ai/grok-4.1-fast",
-      "name": "Grok 4.1 Fast ($0.20/$0.50)",
+      "id": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash ($0.14/$0.28)",
       "provider": "Budget"
     },
     {
       "id": "openai/gpt-4o-mini",
-      "name": "GPT-4o Mini ($0.15/$0.60)",
+      "name": "GPT-4o Mini ($0.15/$0.6)",
       "provider": "Budget"
     },
     {
       "id": "openai/gpt-5-mini",
-      "name": "GPT-5 Mini ($0.25/$2.00)",
+      "name": "GPT-5 Mini ($0.25/$2)",
       "provider": "Standard"
     },
     {
       "id": "openai/gpt-4.1-mini",
-      "name": "GPT-4.1 Mini ($0.40/$1.60)",
+      "name": "GPT-4.1 Mini ($0.4/$1.6)",
+      "provider": "Standard"
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite",
+      "name": "Gemini 3.1 Flash Lite ($0.25/$1.5)",
       "provider": "Standard"
     },
     {
       "id": "google/gemini-3-flash-preview",
-      "name": "Gemini 3 Flash Preview ($0.50/$3.00)",
+      "name": "Gemini 3 Flash Preview ($0.5/$3)",
+      "provider": "Standard"
+    },
+    {
+      "id": "x-ai/grok-4.3",
+      "name": "Grok 4.3 ($1.25/$2.5)",
       "provider": "Standard"
     },
     {
       "id": "anthropic/claude-haiku-4.5",
-      "name": "Claude Haiku 4.5 ($1.00/$5.00)",
+      "name": "Claude Haiku 4.5 ($1/$5)",
       "provider": "Pro"
     },
     {
-      "id": "google/gemini-3-pro-preview",
-      "name": "Gemini 3 Pro Preview ($2.00/$12.00)",
+      "id": "google/gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro Preview ($2/$12)",
       "provider": "Pro"
     },
     {
-      "id": "anthropic/claude-sonnet-4-6",
-      "name": "Claude Sonnet 4.6 ($3.00/$15.00)",
+      "id": "anthropic/claude-sonnet-5",
+      "name": "Claude Sonnet 5 ($2/$10)",
       "provider": "Pro"
     },
     {
       "id": "openai/gpt-5.2",
-      "name": "GPT-5.2 ($1.75/$14.00)",
+      "name": "GPT-5.2 ($1.75/$14)",
       "provider": "Pro"
     }
   ],
